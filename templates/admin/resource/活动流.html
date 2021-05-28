@@ -1,0 +1,463 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>活动流</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">主页</a>
+            </li>
+            <li>
+                <a>应用</a>
+            </li>
+            <li class="active">
+                <strong>活动流</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content  animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>时间轴活动流</h5>
+                </div>
+
+                <div class="ibox-content">
+
+                    <div class="activity-stream">
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-pencil"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a5.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                在<a href="#"> 游戏 </a>项目中添加新注释。
+                            </div>
+                        </div>
+
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-commenting-o"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a4.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                对<a href="#"> 小红 </a>个人资料发表了评论。
+                            </div>
+                        </div>
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-circle"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a2.jpg">
+                                        <img src="static/picture/a3.jpg">
+                                        <img src="static/picture/a4.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                在<a href="#">游戏</a>项目中更改了第三阶段的状态。
+                            </div>
+                        </div>
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-circle"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a6.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                将新文件添加到自己的文件共享位置。
+                            </div>
+                        </div>
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-send bg-primary"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a7.jpg">
+                                        <img src="static/picture/a1.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                向所有参与新项目的用户发送电子邮件。
+                            </div>
+                        </div>
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-tag bg-warning"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a7.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                已被标记在关于新项目的最新评论中。
+                            </div>
+                        </div>
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-circle"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a8.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                改变了最新项目第二阶段的状况。
+                            </div>
+                        </div>
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-circle"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a1.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                将新文件添加到自己的文件共享位置。
+                            </div>
+                        </div>
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-circle"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a6.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                将新文件添加到自己的文件共享位置。
+                            </div>
+                        </div>
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-send"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a7.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                向所有参与新项目的用户发送电子邮件。
+                            </div>
+                        </div>
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-sliders bg-success"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a2.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                已被标记在关于新项目的最新评论中。
+                            </div>
+                        </div>
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-circle"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a8.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                改变了最新项目第二阶段的状况。
+                            </div>
+                        </div>
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-circle"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a1.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                将新文件添加到自己的文件共享位置。
+                            </div>
+                        </div>
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-pencil"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a5.jpg">
+                                        <img src="static/picture/a2.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                在<a href="#">游戏</a>项目中更改了第三阶段的状态。
+                            </div>
+                        </div>
+
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-commenting-o"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a4.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                评论 <a href="#">小明</a> 好牛逼.
+                            </div>
+                        </div>
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-circle"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a2.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                在<a href="#">游戏</a>项目中更改了第三阶段的状态。
+                            </div>
+                        </div>
+
+                        <div class="stream">
+                            <div class="stream-badge">
+                                <i class="fa fa-circle"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info">
+                                    <a href="#">
+                                        <img src="static/picture/a6.jpg">
+                                        <span>小明</span>
+                                        <span class="date">昨天上午 08:14:41</span>
+                                    </a>
+                                </div>
+                                将新文件添加到自己的文件共享位置。
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>基本活动流</h5>
+                </div>
+
+                <div class="ibox-content">
+
+                    <div class="stream-small">
+                        <span class="label label-primary"> 添加</span>
+                        <span class="text-muted"> 今天在 10:30:50 </span> / <a href="#">小明</a> 向用户组添加了新的联系人。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-success"> 点评</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 评论小红简介。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-success"> 点评</span>
+                        <span class="text-muted"> 今天在 04:30:33 </span> / <a href="#">小明</a> 评论了大家。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-success"> 点评</span>
+                        <span class="text-muted"> 今天在 11:43:59 </span> / <a href="#">小明</a> 评论了大家。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-primary"> 添加</span>
+                        <span class="text-muted"> 昨天在 10:02:33 </span> / <a href="#">小明</a> 添加新的文件到项目。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-warning"> 活动</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 将新项目添加到百行内容。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-warning"> 活动</span>
+                        <span class="text-muted"> 昨天在 10:32:12 </span> / <a href="#">小明</a> 加入新组。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-warning"> 活动</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 评论小红简介。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-warning"> 活动</span>
+                        <span class="text-muted"> 今天在 04:30:33 </span> / <a href="#">小明</a> 评论了大家。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 评论小红简介。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 04:30:33 </span> / <a href="#">小明</a> 评论了大家。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 11:43:59 </span> / <a href="#">小明</a> 评论了大家。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 将新项目添加到百行内容。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 昨天在 10:32:12 </span> / <a href="#">小明</a> 加入新组。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 评论小红简介。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 04:30:33 </span> / <a href="#">小明</a> 评论了大家。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 将新项目添加到百行内容。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 昨天在 10:32:12 </span> / <a href="#">小明</a> 加入新组。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 评论小红简介。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 04:30:33 </span> / <a href="#">小明</a> 评论了大家。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-success"> 点评</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 评论小红简介。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-success"> 点评</span>
+                        <span class="text-muted"> 今天在 04:30:33 </span> / <a href="#">小明</a> 评论了大家。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-success"> 点评</span>
+                        <span class="text-muted"> 今天在 11:43:59 </span> / <a href="#">小明</a> 评论了大家。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-warning"> 活动</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 将新项目添加到百行内容。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-warning"> 活动</span>
+                        <span class="text-muted"> 昨天在 10:32:12 </span> / <a href="#">小明</a> 加入新组。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-warning"> 活动</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 评论小红简介。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-warning"> 活动</span>
+                        <span class="text-muted"> 今天在 04:30:33 </span> / <a href="#">小明</a> 评论了大家。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 评论小红简介。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 04:30:33 </span> / <a href="#">小明</a> 评论了大家。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 11:43:59 </span> / <a href="#">小明</a> 评论了大家。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 将新项目添加到百行内容。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 昨天在 10:32:12 </span> / <a href="#">小明</a> 加入新组。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 评论小红简介。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 04:30:33 </span> / <a href="#">小明</a> 评论了大家。
+                    </div>
+                    <div class="stream-small">
+                        <span class="label label-default"> 注意</span>
+                        <span class="text-muted"> 今天在 08:10:50 </span> / <a href="#">小明</a> 评论小红简介。
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

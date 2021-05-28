@@ -1,0 +1,192 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+<!-- Ladda style -->
+<link href="/statics/admin/css/ladda-themeless.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>加载按钮</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">主页</a>
+            </li>
+            <li>
+                <a>组件</a>
+            </li>
+            <li class="active">
+                <strong>加载按钮</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>加载按钮 - Ladda</h5>
+                </div>
+
+                <div class="ibox-content">
+
+                    <strong>Ladda</strong>
+                    <p>
+                        将加载指示符合并到调用它们的动作中的UI概念。主要用于表单，它可以让用户在提交时立即提供反馈，而不是让浏览器做其事情时想知道。
+                    </p>
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h4>扩大左</h4>
+                            <button class="ladda-button btn btn-primary" data-style="expand-left">提交</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <h4>向右展开</h4>
+                            <button class="ladda-button btn btn-primary" data-style="expand-right">提交</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <h4>扩大下</h4>
+                            <button class="ladda-button btn btn-primary" data-style="expand-up">提交</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <h4>向下扩展</h4>
+                            <button class="ladda-button btn btn-primary" data-style="expand-down">提交</button>
+                        </div>
+                    </div>
+                    <div class="row m-t-md">
+                        <div class="col-sm-3">
+                            <h4>收缩</h4>
+                            <button class="ladda-button btn btn-warning" data-style="contract">提交</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <h4>放大</h4>
+                            <button class="ladda-button btn btn-warning" data-style="zoom-in">提交</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <h4>缩小</h4>
+                            <button class="ladda-button btn btn-warning" data-style="zoom-out">提交</button>
+                        </div>
+                    </div>
+                    <div class="row m-t-md">
+                        <div class="col-sm-3">
+                            <h4>滑动左</h4>
+                            <button class="ladda-button  btn btn-info" data-style="slide-left">提交</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <h4>滑动向右</h4>
+                            <button class="ladda-button btn btn-info" data-style="slide-right">提交</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <h4>向上滑动</h4>
+                            <button class="ladda-button btn btn-info" data-style="slide-up">提交</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <h4>滑动下</h4>
+                            <button class="ladda-button btn btn-info" data-style="slide-down">提交</button>
+                        </div>
+                    </div>
+                    <div class="row m-t-lg">
+                        <div class="col-sm-3">
+                            <section class="progress-demo">
+                                <h4>向右展开</h4>
+                                <button class="ladda-button btn btn-danger" data-style="expand-right">提交</button>
+                            </section>
+                        </div>
+                        <div class="col-sm-3">
+                            <section class="progress-demo">
+                                <h4>收缩</h4>
+                                <button class="ladda-button btn btn-danger" data-style="contract">提交</button>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="m-t-lg">
+                        <h4 class="m-t-md">演示如何使用api服务</h4>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <button class="ladda-button ladda-button-demo btn btn-primary" data-style="zoom-in">提交</button>
+                        </div>
+                        <div class="col-sm-9">
+                            <pre>
+&lt;button class="ladda-button ladda-button-demo btn btn-primary"  data-style="zoom-in"&gt;Submit&lt;/button&gt;
+</pre>
+                            <pre>
+var l = Ladda.bind('.ladda-button-demo');
+l.click(function()
+
+// Start loading
+l.ladda( 'start' );
+
+// Do something in backend and then stop ladda
+// setTimeout() is only for demo purpose
+setTimeout(function()
+  l.ladda('stop');
+},2000)
+
+});
+</pre>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+    <!-- Ladda -->
+    <script src="/statics/admin/js/spin.min.js"></script>
+    <script src="/statics/admin/js/ladda.min.js"></script>
+    <script src="/statics/admin/js/ladda.jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            // Bind normal buttons
+            Ladda.bind('.ladda-button', {
+                timeout: 2000
+            });
+
+            // Bind progress buttons and simulate loading progress
+            Ladda.bind('.progress-demo .ladda-button', {
+                callback: function(instance) {
+                    var progress = 0;
+                    var interval = setInterval(function() {
+                        progress = Math.min(progress + Math.random() * 0.1, 1);
+                        instance.setProgress(progress);
+
+                        if (progress === 1) {
+                            instance.stop();
+                            clearInterval(interval);
+                        }
+                    }, 200);
+                }
+            });
+
+
+            var l = $('.ladda-button-demo').ladda();
+
+            l.click(function() {
+                // Start loading
+                l.ladda('start');
+
+                // Timeout example
+                // Do something in backend and then stop ladda
+                setTimeout(function() {
+                    l.ladda('stop');
+                }, 12000)
+
+
+            });
+
+        });
+    </script>
+{% endblock %}
