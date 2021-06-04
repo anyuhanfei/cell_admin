@@ -1,0 +1,100 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+
+<style>
+    .ibox-title a {
+        font-size: 20px;
+    }
+</style>
+{% endblock%}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>角色管理</h2>
+        <ol class="breadcrumb">
+            对角色进行设置, 并且可控制角色权限
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 style="font-size: 20px;">角色权限控制</h5>
+                <div class="ibox-tools">
+                    <a onclick="bank()">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal">
+                    {% for top in module %}
+                    {% if top.上级id == 0 %}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ top.名称 }}</label>
+                        <div class="col-sm-10">
+                            {% for down in module %}
+                            {% if down.上级id == top.module_id %}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" value="{{ down.module_id }}" name="action" {% if down.是否选中 == True %}checked{% endif %}> {{ down.名称 }}
+                            </label>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="cancel">取消</button>
+                            <button class="btn btn-primary" type="button" id="submit">设置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    function bank() {
+        window.location.href = "{{ url_for('admin.角色') }}"
+    }
+
+    $("#cancel").click(function () {
+        window.location.href = "{{ url_for('admin.角色') }}"
+    })
+
+    $("#submit").click(function () {
+        var action_ids = ',';
+        $('input[name="action"]:checked').each(function(){
+            action_ids += $(this).val()+',';
+        });
+        $.ajax({
+            url: "{{ url_for('admin.修改角色权限提交', id=id) }}",
+            type: "post",
+            data: {
+                action_ids: action_ids
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    cell_msg('success', '修改角色权限', data.msg)
+                    setTimeout(() => {
+                        window.location.href = "{{ url_for('admin.角色') }}"
+                    }, 1000);
+                } else {
+                    cell_msg('error', '修改角色权限', data.msg)
+                }
+            }
+        })
+    })
+</script>
+{% endblock %}

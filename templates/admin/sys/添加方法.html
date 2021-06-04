@@ -1,0 +1,128 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+
+<style>
+    .ibox-title a {
+        font-size: 20px;
+    }
+</style>
+{% endblock%}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>模块方法管理</h2>
+        <ol class="breadcrumb">
+            对需要进行权限控制的模块及其方法进行管理设置, 以备角色设置权限使用
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 style="font-size: 20px;">添加方法</h5>
+                <div class="ibox-tools">
+                    <a onclick="bank()">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal">
+                    <div class="form-group"><label class="col-sm-2 control-label">方法名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="名称" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">选择上级目录</label>
+                        <div class="col-sm-10">
+                            <select class="form-control m-b" id="上级id">
+                                <option value="0">请选择上级目录</option>
+                                {% for value in 模块 %}
+                                <option value="{{ value.module_id }}">{{ value.名称 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">路由</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="路由" class="form-control" placeholder="请填写完整路由, 如: /admin/sys/修改模块/<int:id>">
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">排序</label>
+                        <div class="col-md-4">
+                            <input type="number" id="排序" class="form-control" placeholder="请输入排序权重">
+                        </div>
+                        <a id="展示权重" class="btn btn-primary" data-toggle="popover" data-placement="auto right"
+                            data-content="{% for value in 方法 %}{{ value.名称 }}({{ value.排序 }}), {% endfor %}">查看排序权重</a>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="cancel">取消</button>
+                            <button class="btn btn-primary" type="button" id="submit">添加</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    function bank() {
+        window.location.href = "{{ url_for('admin.模块') }}"
+    }
+
+    $("#cancel").click(function () {
+        window.location.href = "{{ url_for('admin.模块') }}"
+    })
+
+    setInterval(() => {
+        var 上级id = $("#上级id").val()
+        if(上级id != 0){
+            var 方法 = ''
+            {% for value in 方法 %}
+            if(上级id == parseInt("{{ value.上级id }}")){
+                方法 += "{{ value.名称 }}({{ value.排序 }}), "
+            }
+            {% endfor %}
+            $("#展示权重").attr('data-content', 方法)
+        }
+    }, 1000);
+
+    $("#submit").click(function () {
+        var 名称 = $("#名称").val()
+        var 上级id = $("#上级id").val()
+        var 路由 = $("#路由").val()
+        var 排序 = $("#排序").val()
+        $.ajax({
+            url: "{{ url_for('admin.添加方法提交') }}",
+            type: "post",
+            data: {
+                名称: 名称,
+                上级id: 上级id,
+                路由: 路由,
+                排序: 排序
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    cell_msg('success', '添加方法', data.msg)
+                    $("#名称").val('')
+                    $("#上级id").val('')
+                    $("#路由").val('')
+                    $("#排序").val('')
+                } else {
+                    cell_msg('error', '添加方法', data.msg)
+                }
+            }
+        })
+    })
+</script>
+{% endblock %}

@@ -18,6 +18,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{USERNAME}:{PASSWORD}@{
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.urandom(24)
 
+app.config['SESSION_TYPE'] = 'filesystem'  # session类型为filesystem
+app.config['SESSION_FILE_DIR'] = '/logs/session'  # session类型为filesystem
+
+app.config['SESSION_PERMANENT'] = True  # 如果设置为True，则关闭浏览器session就失效。
+app.config['SESSION_USE_SIGNER'] = False  # 是否对发送到浏览器上session的cookie值进行加密
+
 db = SQLAlchemy(app)
 
 from apps.admin import admin as admin_blueprint

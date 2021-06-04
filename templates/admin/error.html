@@ -1,0 +1,24 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+<div class="widget red-bg p-lg text-center" style="margin: 200px;">
+    <div class="m-b-md">
+        <i class="fa fa-bell fa-4x"></i>
+        <h3 class="font-bold no-margins">&nbsp;
+        </h3>
+        <small>非法操作, 5秒后自动返回首页</small>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    setTimeout(() => {
+        window.location.href = "/admin"
+    }, 5000);
+</script>
+{% endblock %}

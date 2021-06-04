@@ -1,0 +1,113 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+
+<style>
+    .ibox-title a {
+        font-size: 20px;
+    }
+</style>
+{% endblock%}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>管理员管理</h2>
+        <ol class="breadcrumb">
+            对管理员进行管理, root 管理员只能修改密码
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 style="font-size: 20px;">添加管理员</h5>
+                <div class="ibox-tools">
+                    <a onclick="bank()">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal">
+                    <div class="form-group"><label class="col-sm-2 control-label">昵称</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="nickname" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">账号</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="account" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">选择角色</label>
+                        <div class="col-sm-10">
+                            <select class="form-control m-b" id="role_id">
+                                <option value="0">请选择角色</option>
+                                {% for value in 角色 %}
+                                <option value="{{ value.role_id }}">{{ value.角色名 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" id="password" class="form-control">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="cancel">取消</button>
+                            <button class="btn btn-primary" type="button" id="submit">添加</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    function bank() {
+        window.location.href = "{{ url_for('admin.管理员') }}"
+    }
+
+    $("#cancel").click(function () {
+        bank()
+    })
+
+    $("#submit").click(function () {
+        var nickname = $("#nickname").val()
+        var account = $("#account").val()
+        var role_id = $("#role_id").val()
+        var password = $("#password").val()
+        $.ajax({
+            url: "{{ url_for('admin.添加管理员提交') }}",
+            type: "post",
+            data: {
+                nickname: nickname,
+                account: account,
+                role_id: role_id,
+                password: password
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    cell_msg('success', '添加管理员', data.msg)
+                    $("#nickname").val('')
+                    $("#account").val('')
+                    $("#role_id").val('0')
+                    $("#password").val('')
+                } else {
+                    cell_msg('error', '添加管理员', data.msg)
+                }
+            }
+        })
+    })
+</script>
+{% endblock %}

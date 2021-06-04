@@ -1,0 +1,90 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+<style>
+    .ibox-title a {
+        font-size: 20px;
+    }
+</style>
+{% endblock%}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>模块方法管理</h2>
+        <ol class="breadcrumb">
+            对需要进行权限控制的模块及其方法进行管理设置, 以备角色设置权限使用
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 style="font-size: 20px;">修改模块</h5>
+                <div class="ibox-tools">
+                    <a onclick="bank()">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal">
+                    <div class="form-group"><label class="col-sm-2 control-label">模块名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="名称" class="form-control" value="{{ data.名称 }}">
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">排序</label>
+                        <div class="col-md-4">
+                            <input type="number" id="排序" class="form-control"  value="{{ data.排序 }}">
+                        </div>
+                        <a class="btn btn-primary" data-toggle="popover" data-placement="auto right" data-content="{% for value in 模块 %}{{ value.名称 }}({{ value.排序 }}), {% endfor %}">查看排序权重</a>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="cancel">取消</button>
+                            <button class="btn btn-primary" type="button" id="submit">添加</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    function bank(){
+        window.location.href="{{ url_for('admin.模块') }}"
+    }
+
+    $("#cancel").click(function(){
+        window.location.href = "{{ url_for('admin.模块') }}"
+    })
+
+    $("#submit").click(function(){
+        var 名称 = $("#名称").val()
+        var 排序 = $("#排序").val()
+        $.ajax({
+            url: "{{ url_for('admin.修改模块提交', id=id) }}",
+            type: "post",
+            data: {名称: 名称, 排序: 排序},
+            success: function(data){
+                if(data.code == 1){
+                    cell_msg('success', '修改模块', data.msg)
+                    setTimeout(() => {
+                        window.location.href = "{{ url_for('admin.模块') }}"
+                    }, 1000);
+                }else{
+                    cell_msg('error', '修改模块', data.msg)
+                }
+            }
+        })
+    })
+</script>
+{% endblock %}

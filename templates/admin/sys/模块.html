@@ -1,0 +1,138 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+<style>
+    .table {
+        margin-bottom: 1px;
+        margin-top: 20px;
+    }
+
+    .ibox {
+        margin-bottom: 1px;
+    }
+
+    .ibox-title {
+        border-style: none;
+        min-height: 12px;
+    }
+
+    .ibox-content {
+        border-style: none;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+
+    .top-button  {
+        padding-top: 20px;
+    }
+
+    .btn {
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>模块方法管理</h2>
+        <ol class="breadcrumb">
+            对需要进行权限控制的模块及其方法进行管理设置, 以备角色设置权限使用
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox-content top-button">
+            <a class="btn btn-primary" href="{{ url_for('admin.添加模块') }}">添加模块</a>
+            <a class="btn btn-primary" href="{{ url_for('admin.添加方法') }}">添加方法</a>
+        </div>
+        <div class="ibox-content">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">#</th>
+                        <th style="width: 30%;">名称</th>
+                        <th style="width: 30%;">路由</th>
+                        <th style="width: 20%;">操作</th>
+                    </tr>
+                </thead>
+            </table>
+            {% for value_模块 in 模块 %}
+            <div class="ibox float-e-margins" id="模块{{ value_模块.module_id }}">
+                <div class="ibox-title">
+                    <h5>{{ value_模块.名称 }}</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a href="{{ url_for('admin.修改模块', id=value_模块.module_id) }}">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <a onclick="delete_item('{{ value_模块.module_id }}')">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-bordered">
+                        <tbody>
+                            {% for value_方法 in 方法 %}
+                            {% if value_方法.上级id == value_模块.module_id %}
+                            <tr class="方法{{ value_方法.module_id }} 模块{{ value_模块.module_id }}"> 
+                                <td style="width: 20%;">{{ value_方法.排序 }}</td>
+                                <td style="width: 30%;">{{ value_方法.名称 }}</td>
+                                <td style="width: 30%;">{{ value_方法.路由 }}</td>
+                                <td style="width: 20%;">
+                                    <a class="btn btn-xs btn-primary" href="{{ url_for('admin.修改方法', id=value_方法.module_id) }}">
+                                        <i class="fa fa-wrench"></i> 修改
+                                    </a>
+                                    <a class="btn btn-xs btn-danger" href="###" onclick="delete_item('{{ value_方法.module_id }}')">
+                                        <i class="fa fa-times"></i> 删除
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endfor %}
+            <div style="padding-bottom: 20px;"></div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="/statics/layer/layer.js"></script>
+<script>
+    function delete_item(id){
+        layer.confirm('确认删除?', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            layer.closeAll()
+            $.ajax({
+                url: "/admin/sys/删除模块提交/" + id,
+                type: "post",
+                success: function(data){
+                    if(data.code == 1){
+                        cell_msg('success', '删除模块', data.msg)
+                        $("#模块" + id).hide()
+                        $(".方法" + id).hide()
+                        $(".模块" + id).hide()
+                    }else{
+                        cell_msg('error', '删除模块', data.msg)
+                    }
+                }
+            })
+        }, function(){
+            layer.closeAll()
+        });
+    }
+</script>
+{% endblock %}

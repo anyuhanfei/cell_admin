@@ -101,3 +101,8 @@ def 徽章():
 @admin.route('resource/栅格')
 def 栅格():
     return render_template('admin/resource/栅格.html')
+
+
+@admin.route('resource/css辅助')
+def css辅助():
+    return render_template('admin/resource/css辅助.html')

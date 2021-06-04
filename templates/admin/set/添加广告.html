@@ -1,0 +1,132 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+
+<style>
+    .ibox-tools a {
+        font-size: 20px;
+    }
+
+    .nav-tabs a {
+        padding: 0px;
+    }
+</style>
+{% endblock%}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>广告管理</h2>
+        <ol class="breadcrumb">
+            设置广告位并填充广告内容, 如图片, 一段文字, 富文本文章等.
+            广告通常是仅展示用的数据
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab-1"> 添加广告位</a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-2">添加广告</a></li>
+                    <div class="ibox-tools">
+                        <a onclick="bank()">
+                            <i class="fa fa-reply"></i>
+                        </a>
+                    </div>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="ibox-content">
+                            <form class="form-horizontal">
+                                <div class="form-group"><label class="col-sm-2 control-label">标题</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="广告位_标题" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <div class="col-sm-4 col-sm-offset-2">
+                                        <button class="btn btn-white" type="button" id="广告位cancel">取消</button>
+                                        <button class="btn btn-primary" type="button" id="广告位_submit">添加</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="tab-2" class="tab-pane">
+                        <div class="ibox-content">
+                            <form class="form-horizontal">
+                                <div class="form-group"><label class="col-sm-2 control-label">标题</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="广告_标题" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group"><label class="col-sm-2 control-label">值</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="广告_值" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <div class="col-sm-4 col-sm-offset-2">
+                                        <button class="btn btn-white" type="button" id="广告_cancel">取消</button>
+                                        <button class="btn btn-primary" type="button" id="广告_submit">添加</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    function bank() {
+        window.location.href = "{{ url_for('admin.广告') }}"
+    }
+
+    $("#广告位_cancel").click(function () {
+        bank()
+    })
+
+    $("#广告_cancel").click(function () {
+        bank()
+    })
+
+    $("#submit").click(function () {
+        var 名称 = $("#名称").val()
+        var 上级id = $("#上级id").val()
+        var 路由 = $("#路由").val()
+        var 排序 = $("#排序").val()
+        $.ajax({
+            url: "{{ url_for('admin.添加方法提交') }}",
+            type: "post",
+            data: {
+                名称: 名称,
+                上级id: 上级id,
+                路由: 路由,
+                排序: 排序
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    cell_msg('success', '添加方法', data.msg)
+                    $("#名称").val('')
+                    $("#上级id").val('')
+                    $("#路由").val('')
+                    $("#排序").val('')
+                } else {
+                    cell_msg('error', '添加方法', data.msg)
+                }
+            }
+        })
+    })
+</script>
+{% endblock %}

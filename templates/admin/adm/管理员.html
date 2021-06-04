@@ -1,0 +1,181 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+<style>
+    .table {
+        margin-bottom: 1px;
+        margin-top: 20px;
+    }
+
+    .ibox {
+        margin-bottom: 1px;
+    }
+
+    .ibox-title {
+        border-style: none;
+        min-height: 12px;
+    }
+
+    .ibox-content {
+        border-style: none;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+
+    .top-button  {
+        padding-top: 20px;
+    }
+
+    .btn {
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>管理员管理</h2>
+        <ol class="breadcrumb">
+            对管理员进行管理, root 管理员只能修改密码
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox-content top-button">
+            <a class="btn btn-primary" href="{{ url_for('admin.添加管理员') }}">添加管理员</a>
+        </div>
+        <div class="ibox-content">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">#</th>
+                        <th style="width: 20%;">昵称</th>
+                        <th style="width: 20%;">账号</th>
+                        <th style="width: 20%;">角色</th>
+                        <th style="width: 30%;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for value in data %}
+                    <tr id="data{{ value.admin_id }}">
+                        <td>{{ value.admin_id }}</td>
+                        <td>{{ value.nickname }}</td>
+                        <td>{{ value.account }}</td>
+                        <td>{{ value.role.角色名 }}</td>
+                        <td>
+                            {% if value.admin_id != 1 %}
+                            <a class="btn btn-xs btn-primary" href="{{ url_for('admin.修改管理员', id=value.admin_id) }}">
+                                <i class="fa fa-wrench"></i> 修改
+                            </a>
+                            <a class="btn btn-xs btn-primary" href="###" onclick="设置角色('{{ value.admin_id }}', '{{ value.role_id }}')">
+                                <i class="fa fa-wrench"></i> 设置角色
+                            </a>
+                            <a class="btn btn-xs btn-danger" href="###" onclick="delete_item('{{ value.admin_id }}')">
+                                <i class="fa fa-times"></i> 删除
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div style="padding-bottom: 20px;"></div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<div class="ibox-content" id="set_div" style="display: none; margin-top: 50px;">
+    <h2 style="text-align: center; margin-bottom: 50px;">设置管理员角色</h2>
+    <form class="form-horizontal">
+        <div class="form-group"><label class="col-sm-2 control-label">选择角色</label>
+            <div class="col-sm-10">
+                <select class="form-control m-b" id="set_role_id">
+                    <option value="0">请选择角色</option>
+                    {% for value in 角色 %}
+                    <option value="{{ value.role_id }}">{{ value.角色名 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <input type="hidden" id="set_admin_id"/>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <div class="col-sm-4 col-sm-offset-5">
+                <button class="btn btn-white" type="button" id="set_cancel">取消</button>
+                <button class="btn btn-primary" type="button" id="set_submit">修改</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/statics/layer/layer.js"></script>
+<script>
+    function 设置角色(id, role_id){
+        $("#set_role_id").val(role_id)
+        $("#set_admin_id").val(id)
+        layer.open({
+            type: 1,
+            shade: false,
+            title: false,
+            content: $('#set_div'),
+            area: ['700px', '350px'],
+        });
+    }
+
+    $("#set_cancel").click(function(){
+        layer.closeAll();
+    })
+
+    $("#set_submit").click(function(){
+        layer.closeAll();
+        var admin_id = $("#set_admin_id").val()
+        var role_id = $("#set_role_id").val()
+        $.ajax({
+            url: "/admin/adm/管理员角色设置/" + admin_id,
+            type: "post",
+            data: {
+                role_id: role_id
+            },
+            success: function(data){
+                if(data.code == 1){
+                    cell_msg('success', '管理员角色设置', data.msg)
+                    setTimeout(() => {
+                        window.location.href = "{{ url_for('admin.管理员') }}"
+                    }, 1000);
+                }else{
+                    cell_msg('error', '管理员角色设置', data.msg)
+                }
+            }
+        })
+    })
+
+    function delete_item(id){
+        layer.confirm('确认删除?', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            layer.closeAll()
+            $.ajax({
+                url: "/admin/adm/删除管理员提交/" + id,
+                type: "post",
+                success: function(data){
+                    if(data.code == 1){
+                        cell_msg('success', '删除管理员', data.msg)
+                        $("#data" + id).hide()
+                    }else{
+                        cell_msg('error', '删除管理员', data.msg)
+                    }
+                }
+            })
+        }, function(){
+            layer.closeAll()
+        });
+    }
+</script>
+{% endblock %}

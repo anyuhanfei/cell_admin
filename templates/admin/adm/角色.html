@@ -1,0 +1,116 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+<style>
+    .table {
+        margin-bottom: 1px;
+        margin-top: 20px;
+    }
+
+    .ibox {
+        margin-bottom: 1px;
+    }
+
+    .ibox-title {
+        border-style: none;
+        min-height: 12px;
+    }
+
+    .ibox-content {
+        border-style: none;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+
+    .top-button  {
+        padding-top: 20px;
+    }
+
+    .btn {
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>角色管理</h2>
+        <ol class="breadcrumb">
+            对角色进行设置, 并且可控制角色权限
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox-content top-button">
+            <a class="btn btn-primary" href="{{ url_for('admin.添加角色') }}">添加角色</a>
+        </div>
+        <div class="ibox-content">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">#</th>
+                        <th style="width: 20%;">名称</th>
+                        <th style="width: 35%;">备注</th>
+                        <th style="width: 30%;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for value in data %}
+                    <tr id="data{{ value.role_id }}">
+                        <td>{{ value.role_id }}</td>
+                        <td>{{ value.角色名 }}</td>
+                        <td>{{ value.备注 }}</td>
+                        <td>
+                            {% if value.role_id != 1 %}
+                            <a class="btn btn-xs btn-primary" href="{{ url_for('admin.修改角色', id=value.role_id) }}">
+                                <i class="fa fa-wrench"></i> 修改
+                            </a>
+                            <a class="btn btn-xs btn-primary" href="{{ url_for('admin.修改角色权限', id=value.role_id) }}">
+                                <i class="fa fa-wrench"></i> 修改权限
+                            </a>
+                            <a class="btn btn-xs btn-danger" href="###" onclick="delete_item('{{ value.role_id }}')">
+                                <i class="fa fa-times"></i> 删除
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div style="padding-bottom: 20px;"></div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="/statics/layer/layer.js"></script>
+<script>
+    function delete_item(id){
+        layer.confirm('确认删除?', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            layer.closeAll()
+            $.ajax({
+                url: "/admin/adm/删除角色提交/" + id,
+                type: "post",
+                success: function(data){
+                    if(data.code == 1){
+                        cell_msg('success', '删除角色', data.msg)
+                        $("#data" + id).hide()
+                    }else{
+                        cell_msg('error', '删除角色', data.msg)
+                    }
+                }
+            })
+        }, function(){
+            layer.closeAll()
+        });
+    }
+</script>
+{% endblock %}

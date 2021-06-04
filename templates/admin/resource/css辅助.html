@@ -1,0 +1,675 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>CSS辅助</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">主页</a>
+            </li>
+            <li>
+                <a>UI元素</a>
+            </li>
+            <li class="active">
+                <strong>CSS辅助</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>上下文颜色</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    类名称
+                                </th>
+                                <th>
+                                    例子
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.text-muted</code></td>
+                                <td><span class="text-muted">示例文本</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>.text-primary</code></td>
+                                <td><span class="text-primary">示例文本</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>.text-success</code></td>
+                                <td><span class="text-success">示例文本</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>.text-info</code></td>
+                                <td><span class="text-info">示例文本</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>.text-warning</code></td>
+                                <td><span class="text-warning">示例文本</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>.text-danger</code></td>
+                                <td><span class="text-danger">示例文本</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>边界半径</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    类名称
+                                </th>
+                                <th>
+                                    例子
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.b-r-xs</code></td>
+                                <td>
+                                    <div class="bg-primary p-xs b-r-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.b-r-sm</code></td>
+                                <td>
+                                    <div class="bg-primary p-xs b-r-sm"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.b-r-md</code></td>
+                                <td>
+                                    <div class="bg-primary p-xs b-r-md"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.b-r-lg</code></td>
+                                <td>
+                                    <div class="bg-primary p-xs b-r-lg"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.b-r-xl</code></td>
+                                <td>
+                                    <div class="bg-primary p-xs b-r-xl"> 示例文本</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Hr线</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    类名称
+                                </th>
+                                <th>
+                                    例子
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>标准 <code>&lt;hr&gt;</code></td>
+                                <td>
+                                    <hr> </td>
+                            </tr>
+                            <tr>
+                                <td><code>.hr-line-dashed</code></td>
+                                <td>
+                                    <hr class="hr-line-dashed"> </td>
+                            </tr>
+                            <tr>
+                                <td><code>.hr-line-solid</code></td>
+                                <td>
+                                    <hr class="hr-line-solid">
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>填充</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    类名称
+                                </th>
+                                <th>
+                                    例子
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.p-xxs</code></td>
+                                <td>
+                                    <div class="p-xxs bg-muted"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.p-xs</code></td>
+                                <td>
+                                    <div class="p-xs bg-muted"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.p-sm</code></td>
+                                <td>
+                                    <div class="p-sm bg-muted"> 示例文本</div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><code>.p-md</code></td>
+                                <td>
+                                    <div class="p-md bg-muted"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.p-lg</code></td>
+                                <td>
+                                    <div class="p-lg bg-muted"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.p-xl</code></td>
+                                <td>
+                                    <div class="p-xl bg-muted"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.no-paddings</code><br><small class="text-muted">去掉全部填充</small> </td>
+                                <td>
+                                    <div class="no-padding bg-muted"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.p-w-(xs,sm,md,lg,xl)</code><br><small>填充宽度</small></td>
+                                <td>
+                                    <div class="p-w-md bg-muted"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.p-h-(xs,sm,md,lg,xl)</code><br><small>高度宽度</small></td>
+                                <td>
+                                    <div class="p-h-md bg-muted"> 示例文本</div>
+                                </td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>边框</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    类名称
+                                </th>
+                                <th>
+                                    例子
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.border-left</code></td>
+                                <td>
+                                    <div class="p-xs border-left"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.border-right</code></td>
+                                <td>
+                                    <div class="p-xs border-right"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.border-top</code></td>
+                                <td>
+                                    <div class="p-xs border-top"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.border-bottom</code></td>
+                                <td>
+                                    <div class="p-xs border-bottom"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.no-borders</code><br><small class="text-muted">删除所有边框</small> </td>
+                                <td>
+                                    <div class="p-xs no-borders"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.border-left-right</code></td>
+                                <td>
+                                    <div class="p-xs border-left-right"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.border-top-bottom</code></td>
+                                <td>
+                                    <div class="p-xs border-top-bottom"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.border-size-(sm,md,lg,xl)</code></td>
+                                <td>
+                                    <div class="p-xs border-top-bottom border-left-right border-size-lg"> 示例文本</div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>宽度，高度</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    类名称
+                                </th>
+                                <th>
+                                    描述
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.h-150</code></td>
+                                <td>最小高度: 150px; </td>
+                            </tr>
+                            <tr>
+                                <td><code>.h-200</code></td>
+                                <td>最小高度: 200px;</td>
+                            </tr>
+                            <tr>
+                                <td><code>.h-300</code></td>
+                                <td>最小高度: 300px;</td>
+                            </tr>
+                            <tr>
+                                <td><code>.w-150</code></td>
+                                <td>最小宽度: 150px; </td>
+                            </tr>
+                            <tr>
+                                <td><code>.w-200</code></td>
+                                <td>最小宽度: 200px;</td>
+                            </tr>
+                            <tr>
+                                <td><code>.w-300</code></td>
+                                <td>最小宽度: 300px;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>上下文背景</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    类名称
+                                </th>
+                                <th>
+                                    例子
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.bg-muted</code></td>
+                                <td>
+                                    <div class="bg-muted p-xs b-r-sm"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.bg-primary</code></td>
+                                <td>
+                                    <div class="bg-primary p-xs b-r-sm"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.bg-success</code></td>
+                                <td>
+                                    <div class="bg-success p-xs b-r-sm"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.bg-info</code></td>
+                                <td>
+                                    <div class="bg-info p-xs b-r-sm"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.bg-warning</code></td>
+                                <td>
+                                    <div class="bg-warning p-xs b-r-sm"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.bg-danger</code></td>
+                                <td>
+                                    <div class="bg-danger p-xs b-r-sm"> 示例文本</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>图片</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    类名称
+                                </th>
+                                <th>
+                                    例子
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.img-circle</code></td>
+                                <td><img src="static/picture/a4.jpg" class="img-circle img-md"> </td>
+                            </tr>
+                            <tr>
+                                <td><code>.img-rounded</code></td>
+                                <td><img src="static/picture/a4.jpg" class="img-rounded img-md"></td>
+                            </tr>
+                            <tr>
+                                <td><code>.img-thumbnail</code></td>
+                                <td><img src="static/picture/a4.jpg" class="img-thumbnail img-md"></td>
+                            </tr>
+                            <tr>
+                                <td><code>.img-sm</code></td>
+                                <td><img src="static/picture/a4.jpg" class="img-sm"></td>
+                            </tr>
+                            <tr>
+                                <td><code>.img-md</code></td>
+                                <td><img src="static/picture/a4.jpg" class="img-md"></td>
+                            </tr>
+                            <tr>
+                                <td><code>.img-lg</code></td>
+                                <td><img src="static/picture/a4.jpg" class="img-lg"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基本字体宽度</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    类名称
+                                </th>
+                                <th>
+                                    描述
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.font-normal</code></td>
+                                <td><span class="font-normal">示例文本</span> </td>
+                            </tr>
+                            <tr>
+                                <td><code>.font-bold</code></td>
+                                <td><span class="font-bold">示例文本</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>.font-italic</code></td>
+                                <td><span class="font-italic">示例文本</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>.text-uppercase</code></td>
+                                <td><span class="text-uppercase">示例文本</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>.text-lowercase</code></td>
+                                <td><span class="text-lowercase">示例文本</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>.text-capitalize</code></td>
+                                <td><span class="text-capitalize">示例文本</span></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>边距</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    类名称
+                                </th>
+                                <th>
+                                    例子
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.m-xxs</code></td>
+                                <td>
+                                    <div class="m-xxs bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-xs</code></td>
+                                <td>
+                                    <div class="m-xs bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-sm</code></td>
+                                <td>
+                                    <div class="m-sm bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><code>.m-md</code></td>
+                                <td>
+                                    <div class="m-md bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-lg</code></td>
+                                <td>
+                                    <div class="m-lg bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-xl</code></td>
+                                <td>
+                                    <div class="m-xl bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-n</code></td>
+                                <td>
+                                    <div class="m-n bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-l / m-l-(xs,sm,md,lg,xl)</code><br><small>边缘左</small></td>
+                                <td>
+                                    <div class="m-l bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-l-n / m-l-n-(xs,sm,md,lg,xl)</code><br><small>边缘左消极</small></td>
+                                <td>
+                                    <div class="m-l-n bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-l-none</code><br><small>清边缘左</small></td>
+                                <td>
+                                    <div class="m-l-none bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-t / m-t-(xs,sm,md,lg,xl)</code><br><small>边缘顶部</small></td>
+                                <td>
+                                    <div class="m-t bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-t-n / m-t-n-(xs,sm,md,lg,xl)</code><br><small>边缘顶部消极</small></td>
+                                <td>
+                                    <div class="m-t-n bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-t-none</code><br><small>清边缘顶部</small></td>
+                                <td>
+                                    <div class="m-t-none bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-r / m-r-(xs,sm,md,lg,xl)</code><br><small>边缘右</small></td>
+                                <td>
+                                    <div class="m-r bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-r-n / m-r-n-(xs,sm,md,lg,xl)</code><br><small>边缘右消极</small></td>
+                                <td>
+                                    <div class="m-r-n bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-r-none</code><br><small>清边缘右</small></td>
+                                <td>
+                                    <div class="m-r-none bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-b / m-b-(xs,sm,md,lg,xl)</code><br><small>边缘底部</small></td>
+                                <td>
+                                    <div class="m-b bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-b-n / m-b-n-(xs,sm,md,lg,xl)</code><br><small>边缘底部消极</small></td>
+                                <td>
+                                    <div class="m-b-n bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.m-b-none</code><br><small>清边缘底部</small></td>
+                                <td>
+                                    <div class="m-b-none bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>.no-margins</code><br><small>删除所有边距</small></td>
+                                <td>
+                                    <div class="no-margins bg-muted p-xs"> 示例文本</div>
+                                </td>
+                            </tr>
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="pull-right">
+            10GB of <strong>250GB</strong> Free.
+        </div>
+        <div>
+            <strong>Copyright</strong> 例子 Company &copy; 2014-2017
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
