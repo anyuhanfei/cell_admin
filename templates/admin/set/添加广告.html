@@ -1,14 +1,13 @@
 {% extends "admin/base.html" %}
 
 {% block css %}
+<link href="/statics/admin/css/basic.css" rel="stylesheet">
+<link href="/statics/admin/css/jasny-bootstrap.min.css" rel="stylesheet">
+<link href="/statics/admin/css/codemirror.css" rel="stylesheet">
 
 <style>
-    .ibox-tools a {
+    .ibox-title a {
         font-size: 20px;
-    }
-
-    .nav-tabs a {
-        padding: 0px;
     }
 </style>
 {% endblock%}
@@ -27,60 +26,62 @@
 </div>
 <div class="wrapper wrapper-content animated fadeIn">
     <div class="row">
-        <div class="col-lg-12">
-            <div class="tabs-container">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#tab-1"> 添加广告位</a></li>
-                    <li class=""><a data-toggle="tab" href="#tab-2">添加广告</a></li>
-                    <div class="ibox-tools">
-                        <a onclick="bank()">
-                            <i class="fa fa-reply"></i>
-                        </a>
-                    </div>
-                </ul>
-                <div class="tab-content">
-                    <div id="tab-1" class="tab-pane active">
-                        <div class="ibox-content">
-                            <form class="form-horizontal">
-                                <div class="form-group"><label class="col-sm-2 control-label">标题</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="广告位_标题" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group">
-                                    <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-white" type="button" id="广告位cancel">取消</button>
-                                        <button class="btn btn-primary" type="button" id="广告位_submit">添加</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div id="tab-2" class="tab-pane">
-                        <div class="ibox-content">
-                            <form class="form-horizontal">
-                                <div class="form-group"><label class="col-sm-2 control-label">标题</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="广告_标题" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="form-group"><label class="col-sm-2 control-label">值</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="广告_值" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group">
-                                    <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-white" type="button" id="广告_cancel">取消</button>
-                                        <button class="btn btn-primary" type="button" id="广告_submit">添加</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 style="font-size: 20px;">添加广告</h5>
+                <div class="ibox-tools">
+                    <a onclick="bank()">
+                        <i class="fa fa-reply"></i>
+                    </a>
                 </div>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal">
+                    <div class="form-group"><label class="col-sm-2 control-label">标题</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="标题" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">选择广告位</label>
+                        <div class="col-sm-10">
+                            <select class="form-control m-b" id="adv_id">
+                                <option value="0">请选择广告位</option>
+                                {% for value in 广告位 %}
+                                <option value="{{ value.ad_id }}">{{ value.标题 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <h6>以下部分三选一填写, 如果填写多个, 则由上至下顺序, 选取填写的第一个表单</h6>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">值</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="值" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">上传图片</label>
+                        <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="padding: 0 15px;">
+                            <div class="form-control" data-trigger="fileinput">
+                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                <span class="fileinput-filename"></span>
+                            </div>
+                            <span class="input-group-addon btn btn-default btn-file">
+                                <span class="fileinput-new">选择图片</span>
+                                <span class="fileinput-exists">更改</span>
+                                <input type="file" name="图片">
+                            </span>
+                            <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">清除</a>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="cancel">取消</button>
+                            <button class="btn btn-primary" type="button" id="submit">添加</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -88,43 +89,33 @@
 {% endblock %}
 
 {% block js %}
+<!-- Jasny -->
+<script src="/statics/admin/js/jasny-bootstrap.min.js"></script>
 <script>
     function bank() {
         window.location.href = "{{ url_for('admin.广告') }}"
     }
 
-    $("#广告位_cancel").click(function () {
-        bank()
-    })
-
-    $("#广告_cancel").click(function () {
+    $("#cancel").click(function () {
         bank()
     })
 
     $("#submit").click(function () {
-        var 名称 = $("#名称").val()
-        var 上级id = $("#上级id").val()
-        var 路由 = $("#路由").val()
-        var 排序 = $("#排序").val()
+        var fd = new FormData();
+        fd.append('标题', $("#标题").val());
+        fd.append('adv_id', $("#advv_id").val());
+        fd.append('值', $("#值").val());
+        fd.append('value', $("#value").val());
+        fd.append('content', editor.getData());
+        fd.append("image", $('#image')[0].files[0]);
         $.ajax({
-            url: "{{ url_for('admin.添加方法提交') }}",
+            url: "/admin/ad/add/submit",
             type: "post",
-            data: {
-                名称: 名称,
-                上级id: 上级id,
-                路由: 路由,
-                排序: 排序
-            },
-            success: function (data) {
-                if (data.code == 1) {
-                    cell_msg('success', '添加方法', data.msg)
-                    $("#名称").val('')
-                    $("#上级id").val('')
-                    $("#路由").val('')
-                    $("#排序").val('')
-                } else {
-                    cell_msg('error', '添加方法', data.msg)
-                }
+            processData: false,
+            contentType: false,
+            data: fd,
+            success: function(data){
+
             }
         })
     })

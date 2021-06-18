@@ -1,9 +1,17 @@
 {% extends "admin/base.html" %}
 
+{% block css %}
+<!--单选复选框-->
+<link href="/statics/admin/css/awesome-bootstrap-checkbox.css" rel="stylesheet">
+<!--向导-->
+<link href="/statics/admin/css/custom.css" rel="stylesheet">
+<link href="/statics/admin/css/jquery.steps.css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>基本表单</h2>
+        <h2>表单</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">主页</a>
@@ -466,5 +474,327 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title  back-change">
+                    <h5>Awesome bootstrap复选框</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项 1</a>
+                            </li>
+                            <li><a href="#">选项 2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <fieldset>
+                                <h3>
+                                    基本
+                                </h3>
+                                <p>
+                                    支持引导牌颜色: <code>.checkbox-primary</code>, <code>.checkbox-info</code> 等.
+                                </p>
+                                <div class="checkbox">
+                                    <input id="checkbox1" type="checkbox">
+                                    <label for="checkbox1">
+                                    默认
+                                </label>
+                                </div>
+                                <div class="checkbox checkbox-primary">
+                                    <input id="checkbox2" type="checkbox" checked="">
+                                    <label for="checkbox2">
+                                    主要
+                                </label>
+                                </div>
+                                <div class="checkbox checkbox-success">
+                                    <input id="checkbox3" type="checkbox">
+                                    <label for="checkbox3">
+                                    成功
+                                </label>
+                                </div>
+                                <div class="checkbox checkbox-info">
+                                    <input id="checkbox4" type="checkbox">
+                                    <label for="checkbox4">
+                                    信息
+                                </label>
+                                </div>
+                                <div class="checkbox checkbox-warning">
+                                    <input id="checkbox5" type="checkbox" checked="">
+                                    <label for="checkbox5">
+                                    警告
+                                </label>
+                                </div>
+                                <div class="checkbox checkbox-danger">
+                                    <input id="checkbox6" type="checkbox" checked="">
+                                    <label for="checkbox6">
+                                    进行检查
+                                </label>
+                                </div>
+                                <p>没有标签文本的复选框</p>
+                                <div class="checkbox">
+                                    <input type="checkbox" id="singleCheckbox1" value="option1" aria-label="Single checkbox One">
+                                    <label></label>
+                                </div>
+                                <div class="checkbox checkbox-primary">
+                                    <input type="checkbox" id="singleCheckbox2" value="option2" checked="" aria-label="Single checkbox Two">
+                                    <label></label>
+                                </div>
+                                <p>内联复选框</p>
+                                <div class="checkbox checkbox-inline">
+                                    <input type="checkbox" id="inlineCheckbox1" value="option1">
+                                    <label for="inlineCheckbox1"> 内联一 </label>
+                                </div>
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" id="inlineCheckbox2" value="option1" checked="">
+                                    <label for="inlineCheckbox2"> 内联二 </label>
+                                </div>
+                                <div class="checkbox checkbox-inline">
+                                    <input type="checkbox" id="inlineCheckbox3" value="option1">
+                                    <label for="inlineCheckbox3"> 内联三 </label>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-md-4">
+                            <fieldset>
+                                <h3>
+                                    盘旋
+                                </h3>
+                                <p>
+                                    <code>.checkbox-circle</code> 圆度
+                                </p>
+                                <div class="checkbox checkbox-circle">
+                                    <input id="checkbox7" type="checkbox">
+                                    <label for="checkbox7">
+                                    简单的圆
+                                </label>
+                                </div>
+                                <div class="checkbox checkbox-info checkbox-circle">
+                                    <input id="checkbox8" type="checkbox" checked="">
+                                    <label for="checkbox8">
+                                    简单圆圆
+                                </label>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-md-4">
+                            <fieldset>
+                                <h3>
+                                    Radios
+                                </h3>
+                                <p>
+                                    支持引导牌颜色： <code>.radio-primary</code>, <code>.radio-danger</code> 等.
+                                </p>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="radio">
+                                            <input type="radio" name="radio1" id="radio1" value="option1" checked="">
+                                            <label for="radio1">
+                                            小
+                                        </label>
+                                        </div>
+                                        <div class="radio">
+                                            <input type="radio" name="radio1" id="radio2" value="option2">
+                                            <label for="radio2">
+                                            大
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="radio radio-danger">
+                                            <input type="radio" name="radio2" id="radio3" value="option1">
+                                            <label for="radio3">
+                                            下一个
+                                        </label>
+                                        </div>
+                                        <div class="radio radio-danger">
+                                            <input type="radio" name="radio2" id="radio4" value="option2" checked="">
+                                            <label for="radio4">
+                                            上一个
+                                        </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p>Radios无标签文字</p>
+                                <div class="radio">
+                                    <input type="radio" id="singleRadio1" value="option1" name="radioSingle1" aria-label="Single radio One">
+                                    <label></label>
+                                </div>
+                                <div class="radio radio-success">
+                                    <input type="radio" id="singleRadio2" value="option2" name="radioSingle1" checked="" aria-label="Single radio Two">
+                                    <label></label>
+                                </div>
+                                <p>Radios内联</p>
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="">
+                                    <label for="inlineRadio1"> 内联一 </label>
+                                </div>
+                                <div class="radio radio-inline">
+                                    <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
+                                    <label for="inlineRadio2"> 内联二 </label>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="jumbotron">
+                <h1>步骤</h1>
+                <p>智能UI组件，允许您轻松创建类似向导的界面。</p>
+                <p><a href="javascript:;" target="_blank" class="btn btn-primary btn-lg" role="button">了解更多关于jQuery的步骤</a>
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基本向导</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项 1</a>
+                            </li>
+                            <li><a href="#">选项 2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <p>
+                        这是Step的基本例子
+                    </p>
+                    <div id="wizard">
+                        <h1>第一步</h1>
+                        <div class="step-content">
+                            <div class="text-center m-t-md">
+                                <h2>这是第1步</h2>
+                                <p>
+                                    我是第一个内容
+                                </p>
+                            </div>
+                        </div>
+
+                        <h1>第二步</h1>
+                        <div class="step-content">
+                            <div class="text-center m-t-md">
+                                <h2>这是第2步</h2>
+                                <p>
+                                    我是第二个内容
+                                </p>
+                            </div>
+                        </div>
+
+                        <h1>第三步</h1>
+                        <div class="step-content">
+                            <div class="text-center m-t-md">
+                                <h2>这是第3步</h2>
+                                <p>
+                                    我是第三个内容
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+{% endblock %}
+
+
+{% block js%}
+    <!--向导-->
+
+    <!-- Steps -->
+    <script src="/statics/admin/js/jquery.steps.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            $("#wizard").steps();
+            $("#form").steps({
+                bodyTag: "fieldset",
+                onStepChanging: function(event, currentIndex, newIndex) {
+                    // Always allow going backward even if the current step contains invalid fields!
+                    if (currentIndex > newIndex) {
+                        return true;
+                    }
+
+                    // Forbid suppressing "Warning" step if the user is to young
+                    if (newIndex === 3 && Number($("#age").val()) < 18) {
+                        return false;
+                    }
+
+                    var form = $(this);
+
+                    // Clean up if user went backward before
+                    if (currentIndex < newIndex) {
+                        // To remove error styles
+                        $(".body:eq(" + newIndex + ") label.error", form).remove();
+                        $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
+                    }
+
+                    // Disable validation on fields that are disabled or hidden.
+                    form.validate().settings.ignore = ":disabled,:hidden";
+
+                    // Start validation; Prevent going forward if false
+                    return form.valid();
+                },
+                onStepChanged: function(event, currentIndex, priorIndex) {
+                    // Suppress (skip) "Warning" step if the user is old enough.
+                    if (currentIndex === 2 && Number($("#age").val()) >= 18) {
+                        $(this).steps("下一个");
+                    }
+
+                    // Suppress (skip) "Warning" step if the user is old enough and wants to the previous step.
+                    if (currentIndex === 2 && priorIndex === 3) {
+                        $(this).steps("上一个");
+                    }
+                },
+                onFinishing: function(event, currentIndex) {
+                    var form = $(this);
+
+                    // Disable validation on fields that are disabled.
+                    // At this point it's recommended to do an overall check (mean ignoring only disabled fields)
+                    form.validate().settings.ignore = ":disabled";
+
+                    // Start validation; Prevent form submission if false
+                    return form.valid();
+                },
+                onFinished: function(event, currentIndex) {
+                    var form = $(this);
+
+                    // Submit form input
+                    form.submit();
+                }
+            });
+        });
+    </script>
 {% endblock %}

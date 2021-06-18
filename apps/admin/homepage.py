@@ -1,10 +1,10 @@
-from flask import render_template, request, session
+from flask import render_template
 
-from . import admin
-from configs.common import return_data
+from . import admin, check_admin_login
 
 
 @admin.route('/')
+@check_admin_login
 def homepage():
     return render_template('admin/homepage.html')
 

@@ -8,6 +8,8 @@ def check_admin_login(function):
     '''装饰器: 判断会员是否登录'''
     @wraps(function)
     def decorated_function(*args, **kwargs):
+        print(session)
+        print(111)
         if 'admin_id' not in session or session['admin_id'] is None:
             return redirect(url_for("admin.login"))
         return function(*args, **kwargs)
