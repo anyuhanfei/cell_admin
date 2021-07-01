@@ -8,8 +8,6 @@ def check_admin_login(function):
     '''装饰器: 判断会员是否登录'''
     @wraps(function)
     def decorated_function(*args, **kwargs):
-        print(session)
-        print(111)
         if 'admin_id' not in session or session['admin_id'] is None:
             return redirect(url_for("admin.login"))
         return function(*args, **kwargs)
@@ -28,9 +26,8 @@ def reading_data():
     admin_data = SysAdmin.query.filter(SysAdmin.admin_id == session['admin_id']).first()
     session['admin'] = {'admin_id': admin_data.admin_id, 'nickname': admin_data.nickname}
 
-import apps.admin.login
 import apps.admin.homepage
-import apps.admin.resource
 import apps.admin.sys
-import apps.admin.adm
 import apps.admin.set
+import apps.admin.user
+import apps.admin.article

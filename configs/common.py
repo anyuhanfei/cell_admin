@@ -10,26 +10,33 @@ def return_data(code, data, msg):
     return {'code': code, 'data': data, 'msg': msg}
 
 
-# def 保存图片(image_obj, 子目录):
-#     '''将传入的图片保存到服务器本地
-#     '''
-#     import os, sys, random, string
+def 保存图片(image_obj, 子目录):
+    '''将传入的图片保存到服务器本地
+    '''
+    import os, sys, random, string
 
-#     # 生成随机字符串，防止图片名字重复
-#     ran_str = ''.join(random.sample(string.ascii_letters + string.digits, 16))
+    # 生成随机字符串，防止图片名字重复
+    ran_str = ''.join(random.sample(string.ascii_letters + string.digits, 16))
 
-#     # 定义一个图片存放的位置 存放在static下面
-#     path = "uploads/%s/" % (子目录)
-#     #图片名称 给图片重命名 为了图片名称的唯一性
-#     imgName = ran_str+img.filename
-#     #图片path和名称组成图片的保存路径
-#     file_path = path+imgName
-#     #保存图片
-#     img.save(file_path)
-#     #这个是图片的访问路径，需返回前端（可有可无）
-#     url = '/static/img/'+imgName
-#     #返回图片路径 到前端
-#     return url
+    # 定义一个图片存放的位置 存放在static下面
+    path = "statics/uploads/%s/" % (子目录)
+    # 图片名称 给图片重命名 为了图片名称的唯一性
+    imgName = ran_str + image_obj.filename
+    # 图片path和名称组成图片的保存路径
+    file_path = path + imgName
+    # 保存图片
+    image_obj.save(file_path)
+    return file_path
+
+
+def 删除图片(image_path):
+    '''将指定图片删除'''
+    import os
+    if os.path.exists(image_path):
+        os.unlink(image_path)
+        return True
+    else:
+        return False
 
 
 def 随机字符串(num, pattern='数字'):

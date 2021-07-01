@@ -139,7 +139,7 @@
     <script src="/statics/admin/js/inspinia.js"></script> <!--气泡提示-->
     <script src="/statics/admin/js/pace.min.js"></script>
     <!-- jQuery UI -->
-    <script src="/statics/admin/js/jquery-ui.min.js"></script>
+    <!-- <script src="/statics/admin/js/jquery-ui.min.js"></script> -->
     <!-- Toastr -->
     <script src="/statics/admin/js/toastr.min.js"></script>
     <script>
@@ -173,6 +173,17 @@
             $("#二级目录" + 二级目录路由).attr('class', 'active')
         }
 
+        function show_image(id){
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                area: '516px',
+                skin: 'layui-layer-nobg', //没有背景色
+                shadeClose: true,
+                content: "<img src='"+ $("#image"+id).attr('src') +"' />"
+            });
+        }
     </script>
     {% block js %}
 

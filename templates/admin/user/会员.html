@@ -1,0 +1,146 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+<link href="/statics/admin/css/cell_style.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>会员管理</h2>
+        <ol class="breadcrumb">
+            对会员进行管理
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox-content top-button">
+            <a class="btn btn-primary" href="{{ url_for('admin.添加会员') }}">添加会员</a>
+        </div>
+        <div class="ibox-content">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width: 6%;">#</th>
+                        <th style="width: 10%;">昵称</th>
+                        <th style="width: 10%;">{{ identity_text }}</th>
+                        <th style="width: 40%;">余额</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in users %}
+                    <tr id="tr{{ item.user_id }}">
+                        <td>{{ item.user_id }}</td>
+                        <td>{{ item.nickname }}</td>
+                        <td><span class="{{ item.get_data('标签') }}">{{ item.account }}</span></td>
+                        <td>
+                            {% for fund in item.fund() %}
+                                {{ fund[2] }}: {{ fund[1] }}
+                                {% if loop.index % 3 == 0 %}<br/>{% else %}&nbsp;&nbsp;&nbsp;&nbsp;{% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a class="btn btn-xs btn-primary" href="{{ url_for('admin.会员编辑', id=item.user_id) }}">
+                                <i class="fa fa-wrench"></i> 编辑
+                            </a>
+                            <a class="btn btn-xs btn-primary" href="{{ url_for('admin.会员详情', id=item.user_id) }}">
+                                <i class="fa fa-address-card-o"></i> 详情
+                            </a>
+                            <a class="btn btn-xs btn-primary" href="{{ url_for('admin.会员充值', id=item.user_id) }}">
+                                <i class="fa fa-dollar"></i> 充值
+                            </a>
+                            {% if item.is_freeze == 0 %}
+                            <a id="freeze{{ item.user_id }}" class="btn btn-xs btn-warning" href="###" onclick="freeze_item('{{ item.user_id }}')">
+                                <i class="fa fa-asterisk"></i> 冻结
+                            </a>
+                            <a id="unfreeze{{ item.user_id }}" class="btn btn-xs btn-primary" href="###" onclick="freeze_item('{{ item.user_id }}')" style="display: none;">
+                                <i class="fa fa-fire"></i> 解冻
+                            </a>
+                            {% else %}
+                            <a id="freeze{{ item.user_id }}" class="btn btn-xs btn-warning" href="###" onclick="freeze_item('{{ item.user_id }}')" style="display: none;">
+                                <i class="fa fa-asterisk"></i> 冻结
+                            </a>
+                            <a id="unfreeze{{ item.user_id }}" class="btn btn-xs btn-primary" href="###" onclick="freeze_item('{{ item.user_id }}')">
+                                <i class="fa fa-fire"></i> 解冻
+                            </a>
+                            {% endif %}
+                            <a class="btn btn-xs btn-danger" href="###" onclick="delete_item('{{ item.user_id }}')">
+                                <i class="fa fa-times"></i> 删除
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div style="padding-bottom: 20px;"></div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script src="/statics/layer/layer.js"></script>
+<script>
+
+    $("#set_cancel").click(function(){
+        layer.closeAll();
+    })
+
+    function delete_item(id){
+        layer.confirm('确认删除?', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            layer.closeAll()
+            $.ajax({
+                url: "/admin/user/删除会员提交/" + id,
+                type: "post",
+                success: function(data){
+                    if(data.code == 1){
+                        cell_msg('success', '删除会员', data.msg)
+                        $("#tr" + id).hide()
+                    }else{
+                        cell_msg('error', '删除会员', data.msg)
+                    }
+                }
+            })
+        }, function(){
+            layer.closeAll()
+        });
+    }
+
+    function freeze_item(id){
+        layer.confirm('确认此操作吗?', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            layer.closeAll()
+            $.ajax({
+                url: "/admin/user/冻结会员提交/" + id,
+                type: "post",
+                success: function(data){
+                    if(data.code == 1){
+                        cell_msg('success', '冻结/解冻会员', data.msg)
+                        $("#freeze" + id).hide()
+                        $("#unfreeze" + id).hide()
+                        if(data.data == 1){
+                            $("#unfreeze" + id).show()
+                        }else{
+                            $("#freeze" + id).show()
+                        }
+                    }else{
+                        cell_msg('error', '冻结/解冻会员', data.msg)
+                    }
+                }
+            })
+        }, function(){
+            layer.closeAll()
+        });
+    }
+
+</script>
+{% endblock %}

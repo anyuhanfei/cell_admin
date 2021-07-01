@@ -1,35 +1,7 @@
 {% extends "admin/base.html" %}
 
 {% block css %}
-<style>
-    .table {
-        margin-bottom: 1px;
-        margin-top: 20px;
-    }
-
-    .ibox {
-        margin-bottom: 1px;
-    }
-
-    .ibox-title {
-        border-style: none;
-        min-height: 12px;
-    }
-
-    .ibox-content {
-        border-style: none;
-        padding-top: 2px;
-        padding-bottom: 2px;
-    }
-
-    .top-button  {
-        padding-top: 20px;
-    }
-
-    .btn {
-        margin-right: 10px;
-    }
-</style>
+<link href="/statics/admin/css/cell_style.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -50,28 +22,19 @@
             <a class="btn btn-primary" href="{{ url_for('admin.添加二级目录') }}">添加二级目录</a>
         </div>
         <div class="ibox-content">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th style="width: 20%;">#</th>
-                        <th style="width: 30%;">名称</th>
-                        <th style="width: 30%;">路由</th>
-                        <th style="width: 20%;">操作</th>
-                    </tr>
-                </thead>
-            </table>
+            <br/>
             {% for value_一级 in 一级目录 %}
             <div class="ibox float-e-margins" id="一级{{ value_一级.catalog_id }}">
                 <div class="ibox-title">
                     <h5><i class="fa {{ value_一级.图标 }}"></i>{{ value_一级.名称 }}</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
+                    <div class="ibox-tools tooltip-demo">
+                        <a class="collapse-link" data-toggle="tooltip" data-placement="top" title="隐藏/展示">
                             <i class="fa fa-chevron-up"></i>
                         </a>
-                        <a href="{{ url_for('admin.修改一级目录', id=value_一级.catalog_id) }}">
+                        <a href="{{ url_for('admin.修改一级目录', id=value_一级.catalog_id) }}" data-toggle="tooltip" data-placement="top" title="修改">
                             <i class="fa fa-wrench"></i>
                         </a>
-                        <a onclick="delete_item('{{ value_一级.catalog_id }}')">
+                        <a onclick="delete_item('{{ value_一级.catalog_id }}')" data-toggle="tooltip" data-placement="top" title="删除">
                             <i class="fa fa-times"></i>
                         </a>
                     </div>
@@ -79,9 +42,19 @@
                 <div class="ibox-content">
                     <table class="table table-bordered">
                         <tbody>
+                            {% if loop.first == True %}
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%;">#</th>
+                                    <th style="width: 30%;">名称</th>
+                                    <th style="width: 30%;">路由</th>
+                                    <th style="width: 20%;">操作</th>
+                                </tr>
+                            </thead>
+                            {% endif %}
                             {% for value_二级 in 二级目录 %}
                             {% if value_二级.上级id == value_一级.catalog_id %}
-                            <tr class="二级{{ value_二级.catalog_id }} 父级{{ value_一级.catalog_id }}"> 
+                            <tr class="二级{{ value_二级.catalog_id }} 父级{{ value_一级.catalog_id }}">
                                 <td style="width: 20%;">{{ value_二级.排序 }}</td>
                                 <td style="width: 30%;">{{ value_二级.名称 }}</td>
                                 <td style="width: 30%;">{{ value_二级.路由 }}</td>

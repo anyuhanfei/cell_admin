@@ -25,8 +25,8 @@
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <h5 style="font-size: 20px;">添加角色</h5>
-                <div class="ibox-tools">
-                    <a onclick="bank()">
+                <div class="ibox-tools tooltip-demo">
+                    <a onclick="bank()" data-toggle="tooltip" data-placement="left" title="返回">
                         <i class="fa fa-reply"></i>
                     </a>
                 </div>
@@ -64,7 +64,7 @@
     }
 
     $("#cancel").click(function () {
-        window.location.href = "{{ url_for('admin.角色') }}"
+        bank()
     })
 
     $("#submit").click(function () {

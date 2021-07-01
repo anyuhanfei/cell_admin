@@ -3993,7 +3993,7 @@ table.table-mail tr td {
 .ibox-title h5 {
   display: inline-block;
   font-size: 14px;
-  margin: 0 0 7px;
+  margin: 0 6px 7px;
   padding: 0;
   text-overflow: ellipsis;
   float: left;
@@ -4009,6 +4009,7 @@ table.table-mail tr td {
   position: relative;
   padding: 0;
   text-align: right;
+  margin-right: 6px;
 }
 .ibox-tools a {
   cursor: pointer;

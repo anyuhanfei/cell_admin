@@ -25,8 +25,8 @@
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <h5 style="font-size: 20px;">添加二级目录</h5>
-                <div class="ibox-tools">
-                    <a onclick="bank()">
+                <div class="ibox-tools tooltip-demo">
+                    <a onclick="bank()" data-toggle="tooltip" data-placement="left" title="返回">
                         <i class="fa fa-reply"></i>
                     </a>
                 </div>
@@ -81,19 +81,19 @@
     }
 
     $("#cancel").click(function () {
-        window.location.href = "{{ url_for('admin.目录') }}"
+        bank()
     })
 
     setInterval(() => {
         var 上级id = $("#上级id").val()
         if(上级id != 0){
-            var 二级目录 = ''
+            var str = ' '
             {% for value in 二级目录 %}
             if(上级id == parseInt("{{ value.上级id }}")){
-                二级目录 += "{{ value.名称 }}({{ value.排序 }}), "
+                str += "{{ value.名称 }}({{ value.排序 }}), "
             }
             {% endfor %}
-            $("#展示权重").attr('data-content', 二级目录)
+            $("#展示权重").attr('data-content', str)
         }
     }, 1000);
 

@@ -1,0 +1,45 @@
+.table {
+    margin-bottom: 10px;
+}
+
+.ibox {
+    margin-bottom: 1px;
+}
+
+.ibox-title {
+    border-style: none;
+    min-height: 12px;
+}
+
+.ibox-content {
+    border-style: none;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.top-button  {
+    padding-top: 20px;
+}
+
+.btn {
+    margin-right: 10px;
+}
+
+
+.image_input {
+    position:relative;
+}
+.image_input input {
+    opacity: 0;
+    position:absolute;
+    height: 200px;
+}
+
+.image_input img {
+    box-sizing: border-box;
+    height: 200px;
+}
+
+.editor_text img {
+    width: 100%;
+}

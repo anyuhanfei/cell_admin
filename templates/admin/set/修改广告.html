@@ -1,0 +1,136 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+<link href="/statics/admin/css/cell_style.css" rel="stylesheet">
+
+<style>
+    .ibox-title a {
+        font-size: 20px;
+    }
+</style>
+{% endblock%}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>广告管理</h2>
+        <ol class="breadcrumb">
+            设置广告位并填充广告内容, 如图片, 一段文字, 富文本文章等.
+            广告通常是仅展示用的数据
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 style="font-size: 20px;">修改广告</h5>
+                <div class="ibox-tools tooltip-demo">
+                    <a onclick="bank()" data-toggle="tooltip" data-placement="left" title="返回">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal">
+                    <div class="form-group"><label class="col-sm-2 control-label">标题</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="标题" class="form-control" value="{{ data.标题 }}">
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">选择广告位</label>
+                        <div class="col-sm-9">
+                            <select class="form-control m-b" id="广告位">
+                                <option value="0">请选择广告位</option>
+                                {% for value in 广告位 %}
+                                <option value="{{ value.ad_id }}" {% if data.广告位 == value.ad_id %}selected{% endif %}>{{ value.标题 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" {% if data.值 == '' %}style="display:none;"{% endif %}>
+                        <label class="col-sm-2 control-label">值</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="值" class="form-control" value="{{ data.值 }}">
+                        </div>
+                    </div>
+                    <div class="form-group"{% if data.图片 == '' %}style="display:none;"{% endif %}>
+                        <label class="col-sm-2 control-label">上传图片</label>
+                        <div class="col-sm-9 image_input">
+                            <input type="file" class="file_input" id="图片">
+                            <img class="img" src="/{{ data.图片 }}" height="200" >
+                        </div>
+                    </div>
+                    <div class="form-group"{% if data.富文本 == '' %}style="display:none;"{% endif %}>
+                        <label class="col-sm-2 control-label">富文本</label>
+                        <div class="col-sm-9">
+                            <textarea id="富文本">{{ data.富文本 | safe }}</textarea>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="cancel">取消</button>
+                            <button class="btn btn-primary" type="button" id="submit">修改</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="/statics/handyeditor/HandyEditor.min.js"></script>
+<script>
+    var he = HE.getEditor('富文本');
+
+    function bank() {
+        window.location.href = "{{ url_for('admin.广告') }}"
+    }
+
+    $("#cancel").click(function () {
+        bank()
+    })
+
+    $("#submit").click(function () {
+        var fd = new FormData();
+        fd.append('标题', $("#标题").val());
+        fd.append('广告位', $("#广告位").val());
+        fd.append('value_type', "{{ value_type }}")
+        fd.append('值', $("#值").val());
+        fd.append('富文本', he.getHtml());
+        fd.append("图片", $('#图片')[0].files[0]);
+        $.ajax({
+            url: "/admin/set/修改广告提交/{{ id }}",
+            type: "post",
+            processData: false,
+            contentType: false,
+            data: fd,
+            success: function(data){
+                if (data.code == 1) {
+                    cell_msg('success', '修改广告', data.msg)
+                } else {
+                    cell_msg('error', '修改广告', data.msg)
+                }
+            }
+        })
+    })
+
+    var fileInput = document.querySelector('input[type=file]')
+    var previewImg = document.querySelector('img')
+    fileInput.addEventListener('change', function () {
+        var file = this.files[0]
+        var reader = new FileReader()
+        // 监听reader对象的的onload事件，当图片加载完成时，把base64编码賦值给预览图片
+        reader.addEventListener("load", function () {
+            previewImg.src = reader.result
+        }, false)
+        // 调用reader.readAsDataURL()方法，把图片转成base64
+        reader.readAsDataURL(file)
+    }, false);
+</script>
+{% endblock %}

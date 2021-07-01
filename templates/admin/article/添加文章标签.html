@@ -1,0 +1,110 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+<link href="/statics/admin/css/cell_style.css" rel="stylesheet">
+
+<style>
+    .ibox-title a {
+        font-size: 20px;
+    }
+</style>
+{% endblock%}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>文章标签管理</h2>
+        <ol class="breadcrumb">
+            对文章标签与文章分类进行管理
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 style="font-size: 20px;">添加文章{{ category_text }}</h5>
+                <div class="ibox-tools tooltip-demo">
+                    <a onclick="bank()" data-toggle="tooltip" data-placement="left" title="返回">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal">
+                    <div class="form-group"><label class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">上传图片</label>
+                        <div class="col-sm-9 image_input">
+                            <input type="file" class="file_input" id="image">
+                            <img class="img" src="/statics/admin/image/adds.png" height="200">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="cancel">取消</button>
+                            <button class="btn btn-primary" type="button" id="submit">添加</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+
+    function bank() {
+        window.location.href = "{{ url_for('admin.文章标签') }}"
+    }
+
+    $("#cancel").click(function () {
+        bank()
+    })
+
+    $("#submit").click(function () {
+        var fd = new FormData();
+        fd.append('name', $("#name").val());
+        fd.append("image", $('#image')[0].files[0]);
+        $.ajax({
+            url: "/admin/article/添加文章标签提交/{{ category }}",
+            type: "post",
+            processData: false,
+            contentType: false,
+            data: fd,
+            success: function(data){
+                if (data.code == 1) {
+                    cell_msg('success', '添加文章标签', data.msg)
+                    $("#name").val('')
+                    $(".img").attr('src', '/statics/admin/image/adds.png')
+                    $("#图片").val('')
+                } else {
+                    cell_msg('error', '添加文章标签', data.msg)
+                }
+            }
+        })
+    })
+
+    var fileInput = document.querySelector('input[type=file]')
+    var previewImg = document.querySelector('img')
+    fileInput.addEventListener('change', function () {
+        var file = this.files[0]
+        var reader = new FileReader()
+        // 监听reader对象的的onload事件，当图片加载完成时，把base64编码賦值给预览图片
+        reader.addEventListener("load", function () {
+            previewImg.src = reader.result
+        }, false)
+        // 调用reader.readAsDataURL()方法，把图片转成base64
+        reader.readAsDataURL(file)
+    }, false);
+</script>
+{% endblock %}

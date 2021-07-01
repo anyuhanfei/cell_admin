@@ -1,35 +1,7 @@
 {% extends "admin/base.html" %}
 
 {% block css %}
-<style>
-    .table {
-        margin-bottom: 1px;
-        margin-top: 20px;
-    }
-
-    .ibox {
-        margin-bottom: 1px;
-    }
-
-    .ibox-title {
-        border-style: none;
-        min-height: 12px;
-    }
-
-    .ibox-content {
-        border-style: none;
-        padding-top: 2px;
-        padding-bottom: 2px;
-    }
-
-    .top-button  {
-        padding-top: 20px;
-    }
-
-    .btn {
-        margin-right: 10px;
-    }
-</style>
+<link href="/statics/admin/css/cell_style.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -51,28 +23,19 @@
             <a class="btn btn-primary" href="{{ url_for('admin.添加广告') }}">添加广告</a>
         </div>
         <div class="ibox-content">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th style="width: 20%;">#</th>
-                        <th style="width: 30%;">标题</th>
-                        <th style="width: 30%;">内容</th>
-                        <th style="width: 20%;">操作</th>
-                    </tr>
-                </thead>
-            </table>
+            <br/>
             {% for value_广告位 in 广告位 %}
             <div class="ibox float-e-margins" id="一级{{ value_广告位.ad_id }}">
                 <div class="ibox-title">
                     <h5>{{ value_广告位.标题 }}</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
+                    <div class="ibox-tools tooltip-demo">
+                        <a class="collapse-link" data-toggle="tooltip" data-placement="top" title="隐藏/展示">
                             <i class="fa fa-chevron-up"></i>
                         </a>
-                        <a href="{{ url_for('admin.修改广告', id=value_广告位.ad_id) }}">
+                        <a href="{{ url_for('admin.修改广告位', id=value_广告位.ad_id) }}" data-toggle="tooltip" data-placement="top" title="修改">
                             <i class="fa fa-wrench"></i>
                         </a>
-                        <a onclick="delete_item('{{ value_广告位.ad_id }}')">
+                        <a onclick="delete_item('{{ value_广告位.ad_id }}')" data-toggle="tooltip" data-placement="top" title="删除">
                             <i class="fa fa-times"></i>
                         </a>
                     </div>
@@ -80,12 +43,40 @@
                 <div class="ibox-content">
                     <table class="table table-bordered">
                         <tbody>
+                            {% if loop.first == True %}
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%;">#</th>
+                                    <th style="width: 30%;">标题</th>
+                                    <th style="width: 30%;">内容</th>
+                                    <th style="width: 20%;">操作</th>
+                                </tr>
+                            </thead>
+                            {% endif %}
                             {% for value_广告 in 广告 %}
-                            {% if value_广告.adv_id == value_广告位.ad_id %}
+                            {% if value_广告.广告位 == value_广告位.ad_id %}
                             <tr class="二级{{ value_广告.ad_id }} 父级{{ value_广告位.ad_id }}">
                                 <td style="width: 20%;">{{ value_广告.ad_id }}</td>
                                 <td style="width: 30%;">{{ value_广告.标题 }}</td>
-                                <td style="width: 30%;"></td>
+                                <td style="width: 30%;">
+                                {% if value_广告.值 != '' %}
+                                    {{ value_广告.值 }}
+                                {% elif value_广告.图片 != '' %}
+                                    <img id="image{{ value_广告.ad_id }}" src="/{{ value_广告.图片 }}" onclick="show_image('{{ value_广告.ad_id }}')" width="60px" height="60px">
+                                {% else %}
+                                <div>
+                                    <a data-toggle="modal" class="btn btn-primary" href="#modal-form{{ value_广告.ad_id }}">展示内容</a>
+                                </div>
+                                <div id="modal-form{{ value_广告.ad_id }}" class="modal fade" aria-hidden="true">
+                                    <div class="modal-dialog modal-content modal-body row">
+                                        <div class="col-sm-1 b-r"></div>
+                                        <div class="col-sm-10 editor_text">
+                                            {{ value_广告.富文本 | safe }}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                </td>
                                 <td style="width: 20%;">
                                     <a class="btn btn-xs btn-primary" href="{{ url_for('admin.修改广告', id=value_广告.ad_id) }}">
                                         <i class="fa fa-wrench"></i> 修改
@@ -106,10 +97,10 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block js %}
+
 <script src="/statics/layer/layer.js"></script>
 <script>
     function delete_item(id){
@@ -118,16 +109,16 @@
         }, function(){
             layer.closeAll()
             $.ajax({
-                url: "/admin/sys/删除目录提交/" + id,
+                url: "/admin/set/删除广告提交/" + id,
                 type: "post",
                 success: function(data){
                     if(data.code == 1){
-                        cell_msg('success', '删除目录', data.msg)
+                        cell_msg('success', '删除广告', data.msg)
                         $("#一级" + id).hide()
                         $(".二级" + id).hide()
                         $(".父级" + id).hide()
                     }else{
-                        cell_msg('error', '删除目录', data.msg)
+                        cell_msg('error', '删除广告', data.msg)
                     }
                 }
             })

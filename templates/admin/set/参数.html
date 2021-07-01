@@ -1,0 +1,160 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+<link href="/statics/admin/css/cell_style.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>参数配置</h2>
+        <ol class="breadcrumb">
+            对参数进行管理, 并设置指定参数数值供系统使用
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox-content top-button">
+            <a class="btn btn-primary" href="{{ url_for('admin.添加参数分组') }}">添加参数分组</a>
+            <a class="btn btn-primary" href="{{ url_for('admin.添加参数') }}">添加参数</a>
+        </div>
+        <div class="ibox-content">
+            <br/>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            {% for value in 分组 %}
+                            {% if loop.first == True %}
+                            <li id="li{{ value.id }}" data-id="{{ value.id }}" class="active">
+                            {% else %}
+                            <li id="li{{ value.id }}" data-id="{{ value.id }}">
+                            {% endif %}
+                                <a data-toggle="tab" href="#tab-{{ value.id }}"> {{ value.标题 }}</a>
+                            </li>
+                            {% endfor %}
+                            <div class="ibox-tools tooltip-demo" style="margin-top: 10px; width: 500px; float: right;">
+                                <a href="###" data-toggle="tooltip" data-placement="top" title="修改当前分组" onclick="修改分组()">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <a onclick="delete_item('0', '分组')" data-toggle="tooltip" data-placement="top" title="删除当前分组">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </ul>
+                        <div class="tab-content">
+                            {% for 分组_value in 分组 %}
+                            {% if loop.first == True %}
+                            <div id="tab-{{ 分组_value.id }}" class="tab-pane active">
+                            {% else %}
+                            <div id="tab-{{ 分组_value.id }}" class="tab-pane">
+                            {% endif %}
+                            <form id="ajaxForm{{ 分组_value.id }}" method="post" action="{{ url_for('admin.参数值提交') }}" enctype="multipart/form-data">
+                                <div class="panel-body">
+                                    {% for 参数_value in 参数 %}
+                                    {% if 参数_value.上级id == 分组_value.id %}
+                                    <div class="form-group" id="参数{{ 参数_value.id }}">
+                                        <label class="col-sm-4 control-label" style="height: 67px; text-align: right;">{{ 参数_value.标题 }}</label>
+                                        <div class="col-sm-6">
+                                            <input type="{{ 参数_value.类型 }}" name="{{ 参数_value.id }}" class="form-control" value="{{ 参数_value.值 }}">
+                                            <h6>{{ 参数_value.备注 }}</h6>
+                                        </div>
+                                        <label class="col-sm-2 control-label" style="height: 67px;">
+                                            <div class="ibox-tools tooltip-demo">
+                                                <a href="{{ url_for('admin.修改参数', id=参数_value.id) }}" data-toggle="tooltip" data-placement="top" title="修改">
+                                                    <i class="fa fa-wrench"></i>
+                                                </a>
+                                                <a onclick="delete_item('{{ 参数_value.id }}', '参数')" data-toggle="tooltip" data-placement="top" title="删除">
+                                                    <i class="fa fa-times"></i>
+                                                </a>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                    <div class="col-sm-4 col-sm-offset-4">
+                                        <button class="btn btn-white" type="button" id="cancel">取消</button>
+                                        <div class="btn btn-primary" onclick="submit('{{ 分组_value.id }}')">设置</div>
+                                    </div>
+                                </div>
+                            </form>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="padding-bottom: 20px;"></div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="/statics/layer/layer.js"></script>
+<script src="/statics/admin/js/jquery.form.js"></script>
+<script>
+    function submit(分组id){
+        $("#ajaxForm" + 分组id).ajaxSubmit(function(data){
+            cell_msg('success', '网站设置', data.msg)
+        });
+    }
+
+    function 修改分组(){
+        $.each($("li[id^='li']"), function(i){ //循环遍历span中id值以“industry_”开头对象
+            if ($(this).hasClass('active')){
+                window.location.href = "/admin/set/修改参数分组/" + $(this).attr('data-id')
+            }
+        });
+    }
+
+    function delete_item(id, 类型){
+        if(类型 == '分组'){
+            $.each($("li[id^='li']"), function(i){ //循环遍历span中id值以“industry_”开头对象
+                if ($(this).hasClass('active')){
+                    id = $(this).attr('data-id')
+                }
+            });
+        }
+        if(id == 0){
+            cell_msg('error', '删除参数', '参数异常')
+        }
+        layer.confirm('确认删除?', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            layer.closeAll()
+            $.ajax({
+                url: "/admin/set/删除参数提交/" + id,
+                type: "post",
+                success: function(data){
+                    if(data.code == 1){
+                        cell_msg('success', '删除参数', data.msg)
+                        if(类型 == '参数'){
+                            $("#参数" + id).hide()
+                        }else{
+                            $("#li" + id).hide()
+                            $("#tab-" + id).hide()
+                            var i = 1
+                            $.each($("li[id^='li']"), function(i){
+                                if(i == 1){
+                                    $(this).attr('class', 'active')
+                                    $("#tab-" +  $(this).attr('data-id')).attr('class', 'tab-pane active')
+                                    i += 1
+                                }
+                            });
+                        }
+                    }else{
+                        cell_msg('error', '删除参数', data.msg)
+                    }
+                }
+            })
+        }, function(){
+            layer.closeAll()
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+<link href="/statics/admin/css/cell_style.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>文章标签管理</h2>
+        <ol class="breadcrumb">
+            对文章标签与文章分类进行管理
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox-content top-button">
+            <a class="btn btn-primary" href="{{ url_for('admin.添加文章标签', category='tag') }}">添加文章标签</a>
+            <a class="btn btn-primary" href="{{ url_for('admin.添加文章标签', category='category') }}">添加文章分类</a>
+        </div>
+        <div class="ibox-content">
+            <br/>
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a data-toggle="tab" href="#tab-1"> 文章分类 </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#tab-2"> 文章标签 </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane active">
+                    <div class="ibox-content">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>名称</th>
+                                    <th>图片</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for value in data %}
+                                {% if value.type == 'category' %}
+                                <tr id="tr{{ value.id }}">
+                                    <td>{{ value.id }}</td>
+                                    <td>{{ value.name }}</td>
+                                    <td>
+                                        <img id="image{{ value.id }}" src="/{{ value.image }}" onclick="show_image('{{ value.id }}')" width="60px" height="60px">
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-xs btn-primary" href="{{ url_for('admin.修改文章标签', id=value.id) }}">
+                                            <i class="fa fa-wrench"></i> 修改
+                                        </a>
+                                        <a class="btn btn-xs btn-danger" href="###" onclick="delete_item('{{ value.id }}')">
+                                            <i class="fa fa-times"></i> 删除
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div style="padding-bottom: 20px;"></div>
+                    </div>
+                </div>
+                <div id="tab-2" class="tab-pane">
+                    <div class="ibox-content">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>名称</th>
+                                    <th>图片</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for value in data %}
+                                {% if value.type == 'tag' %}
+                                <tr id="tr{{ value.id }}">
+                                    <td>{{ value.id }}</td>
+                                    <td>{{ value.name }}</td>
+                                    <td>
+                                        <img id="image{{ value.id }}" src="/{{ value.image }}" onclick="show_image('{{ value.id }}')" width="60px" height="60px">
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-xs btn-primary" href="{{ url_for('admin.修改文章标签', id=value.id) }}">
+                                            <i class="fa fa-wrench"></i> 修改
+                                        </a>
+                                        <a class="btn btn-xs btn-danger" href="###" onclick="delete_item('{{ value.id }}')">
+                                            <i class="fa fa-times"></i> 删除
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div style="padding-bottom: 20px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div style="padding-bottom: 20px;"></div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="/statics/layer/layer.js"></script>
+<script src="/statics/admin/js/jquery.form.js"></script>
+<script>
+    function submit(分组id){
+        $("#ajaxForm" + 分组id).ajaxSubmit(function(data){
+            cell_msg('success', '网站设置', data.msg)
+        });
+    }
+
+    function 修改分组(){
+        $.each($("li[id^='li']"), function(i){ //循环遍历span中id值以“industry_”开头对象
+            if ($(this).hasClass('active')){
+                window.location.href = "/admin/set/修改参数分组/" + $(this).attr('data-id')
+            }
+        });
+    }
+
+    function delete_item(id){
+        layer.confirm('确认删除?', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            layer.closeAll()
+            $.ajax({
+                url: "/admin/article/删除文章标签提交/" + id,
+                type: "post",
+                success: function(data){
+                    if(data.code == 1){
+                        cell_msg('success', '删除文章标签', data.msg)
+                        $("#tr" + id).hide()
+                    }else{
+                        cell_msg('error', '删除参数', data.msg)
+                    }
+                }
+            })
+        }, function(){
+            layer.closeAll()
+        });
+    }
+</script>
+{% endblock %}

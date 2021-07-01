@@ -1,0 +1,134 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+
+<style>
+    .ibox-title a {
+        font-size: 20px;
+    }
+</style>
+{% endblock%}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>参数配置</h2>
+        <ol class="breadcrumb">
+            对参数进行管理, 并设置指定参数数值供系统使用
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 style="font-size: 20px;">添加参数配置</h5>
+                <div class="ibox-tools tooltip-demo">
+                    <a onclick="bank()" data-toggle="tooltip" data-placement="left" title="返回">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal">
+                    <div class="form-group"><label class="col-sm-2 control-label">标题</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="标题" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">选择分组</label>
+                        <div class="col-sm-9">
+                            <select class="form-control m-b" id="上级id">
+                                <option value="0">请选择分组</option>
+                                {% for value in 分组 %}
+                                <option value="{{ value.id }}">{{ value.标题 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">选择表单类型</label>
+                        <div class="col-sm-9">
+                            <select class="form-control m-b" id="类型">
+                                <option value="text">普通输入框</option>
+                                <option value="password">密码输入框</option>
+                                <option value="number">数字输入框</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="备注" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">排序</label>
+                        <div class="col-md-4">
+                            <input type="number" id="排序" class="form-control" placeholder="请输入排序权重">
+                        </div>
+                        <a id="展示权重" class="btn btn-primary" data-toggle="popover" data-placement="auto right" data-content="{% for value in 参数 %}{{ value.标题 }}({{ value.排序 }}), {% endfor %}">查看排序权重</a>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="cancel">取消</button>
+                            <button class="btn btn-primary" type="button" id="submit">添加</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    function bank() {
+        window.location.href = "{{ url_for('admin.参数') }}"
+    }
+
+    $("#cancel").click(function () {
+        bank()
+    })
+
+    setInterval(() => {
+        var 上级id = $("#上级id").val()
+        if(上级id != 0){
+            var str = ' '
+            {% for value in 参数 %}
+            if(上级id == parseInt("{{ value.上级id }}")){
+                str += "{{ value.标题 }}({{ value.排序 }}), "
+            }
+            {% endfor %}
+            $("#展示权重").attr('data-content', str)
+        }
+    }, 1000);
+
+    $("#submit").click(function () {
+        var 标题 = $("#标题").val()
+        var 排序 = $("#排序").val()
+        var 上级id = $("#上级id").val()
+        var 类型 = $("#类型").val()
+        var 备注 = $("#备注").val()
+        $.ajax({
+            url: "{{ url_for('admin.添加参数提交') }}",
+            type: "post",
+            data: {
+                标题: 标题, 排序: 排序, 类型: 类型, 上级id: 上级id, 备注: 备注
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    cell_msg('success', '添加参数', data.msg)
+                    $("#标题").val('')
+                    $("#排序").val(0)
+                    $("#类型").val('text')
+                    $("#上级id").val(0)
+                } else {
+                    cell_msg('error', '添加参数', data.msg)
+                }
+            }
+        })
+    })
+</script>
+{% endblock %}

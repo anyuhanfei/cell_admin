@@ -1,0 +1,163 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+<link href="/statics/admin/css/cell_style.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>会员管理</h2>
+        <ol class="breadcrumb">
+            对会员进行管理
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox-content">
+            <div class="ibox-title">
+                <h5 style="font-size: 20px;">会员信息编辑</h5>
+                <div class="ibox-tools tooltip-demo">
+                    <a onclick="bank()" data-toggle="tooltip" data-placement="left" title="返回">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#tab-1"> 修改基本信息</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#tab-2"> 修改密码</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#tab-3"> 修改二级密码</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#tab-4"> 设置标记 </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <form id="ajaxForm1" method="post" action="{{ url_for('admin.会员编辑提交', id=id, code=1) }}" enctype="multipart/form-data">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" style="height: 67px; text-align: right;">昵称</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="nickname" class="form-control" value="{{ user.nickname }}">
+                                            </div>
+                                            <label class="col-sm-2 control-label" style="height: 67px; text-align: right;"> </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" style="height: 67px; text-align: right;">{{ identity_text }}</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="account" class="form-control" value="{{ user.account }}">
+                                            </div>
+                                            <label class="col-sm-2 control-label" style="height: 67px; text-align: right;"> </label>
+                                        </div>
+                                        <div class="col-sm-4 col-sm-offset-2">
+                                            <button class="btn btn-white cancel" type="button">取消</button>
+                                            <div class="btn btn-primary" onclick="submit('1')">设置</div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="tab-2" class="tab-pane">
+                                <form id="ajaxForm2" method="post" action="{{ url_for('admin.会员编辑提交', id=id, code=2) }}" enctype="multipart/form-data">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" style="height: 67px; text-align: right;">密码</label>
+                                            <div class="col-sm-8">
+                                                <input type="password" name="password" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-sm-offset-2">
+                                            <button class="btn btn-white cancel" type="button">取消</button>
+                                            <div class="btn btn-primary" onclick="submit('2')">设置</div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="tab-3" class="tab-pane">
+                                <form id="ajaxForm3" method="post" action="{{ url_for('admin.会员编辑提交', id=id, code=3) }}" enctype="multipart/form-data">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" style="height: 67px; text-align: right;">二级密码</label>
+                                            <div class="col-sm-8">
+                                                <input type="password" name="level_password" class="form-control">
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="col-sm-4 col-sm-offset-2">
+                                            <button class="btn btn-white cancel" type="button">取消</button>
+                                            <div class="btn btn-primary" onclick="submit('3')">设置</div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="tab-4" class="tab-pane">
+                                <form id="ajaxForm4" method="post" action="{{ url_for('admin.会员编辑提交', id=id, code=4) }}" enctype="multipart/form-data">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" style="height: 67px; text-align: right;">选择标签</label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control m-b" name="标签" id="标签">
+                                                    <option value="">请选择颜色标签</option>
+                                                    <option value="">无</option>
+                                                    <option value="badge">灰色</option>
+                                                    <option value="badge badge-primary">绿色</option>
+                                                    <option value="badge badge-info">青色</option>
+                                                    <option value="badge badge-success">蓝色</option>
+                                                    <option value="badge badge-warning">橙色</option>
+                                                    <option value="badge badge-danger">红色</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-sm-offset-2">
+                                            <button class="btn btn-white cancel" type="button">取消</button>
+                                            <div class="btn btn-primary" onclick="submit('4')">设置</div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="padding-bottom: 20px;"></div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="/statics/layer/layer.js"></script>
+<script src="/statics/admin/js/jquery.form.js"></script>
+<script>
+    function bank(){
+        window.location.href = "{{ url_for('admin.会员') }}"
+
+    }
+
+    $(".cancel").click(function(){
+        bank()
+    })
+
+    function submit(分组id){
+        $("#ajaxForm" + 分组id).ajaxSubmit(function(data){
+            cell_msg('success', '网站设置', data.msg)
+        });
+    }
+
+    $("#标签").val("{{ user.get_data('标签') }}")
+
+</script>
+{% endblock %}

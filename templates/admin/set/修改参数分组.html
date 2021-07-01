@@ -1,0 +1,90 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+
+<style>
+    .ibox-title a {
+        font-size: 20px;
+    }
+</style>
+{% endblock%}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>参数配置</h2>
+        <ol class="breadcrumb">
+            对参数进行管理, 并设置指定参数数值供系统使用
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 style="font-size: 20px;">修改参数配置分组</h5>
+                <div class="ibox-tools tooltip-demo">
+                    <a onclick="bank()" data-toggle="tooltip" data-placement="left" title="返回">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal">
+                    <div class="form-group"><label class="col-sm-2 control-label">标题</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="标题" class="form-control" value="{{ data.标题 }}">
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">排序</label>
+                        <div class="col-md-4">
+                            <input type="number" id="排序" class="form-control" value="{{ data.排序 }}">
+                        </div>
+                        <a class="btn btn-primary" data-toggle="popover" data-placement="auto right" data-content="{% for value in 分组 %}{{ value.标题 }}({{ value.排序 }}), {% endfor %}">查看排序权重</a>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="cancel">取消</button>
+                            <button class="btn btn-primary" type="button" id="submit">修改</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    function bank() {
+        window.location.href = "{{ url_for('admin.参数') }}"
+    }
+
+    $("#cancel").click(function () {
+        bank()
+    })
+
+    $("#submit").click(function () {
+        var 标题 = $("#标题").val()
+        var 排序 = $("#排序").val()
+        $.ajax({
+            url: "{{ url_for('admin.修改参数分组提交', id=id) }}",
+            type: "post",
+            data: {
+                标题: 标题, 排序: 排序
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    cell_msg('success', '修改参数', data.msg)
+                } else {
+                    cell_msg('error', '修改参数', data.msg)
+                }
+            }
+        })
+    })
+</script>
+{% endblock %}

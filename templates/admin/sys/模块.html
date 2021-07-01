@@ -1,35 +1,7 @@
 {% extends "admin/base.html" %}
 
 {% block css %}
-<style>
-    .table {
-        margin-bottom: 1px;
-        margin-top: 20px;
-    }
-
-    .ibox {
-        margin-bottom: 1px;
-    }
-
-    .ibox-title {
-        border-style: none;
-        min-height: 12px;
-    }
-
-    .ibox-content {
-        border-style: none;
-        padding-top: 2px;
-        padding-bottom: 2px;
-    }
-
-    .top-button  {
-        padding-top: 20px;
-    }
-
-    .btn {
-        margin-right: 10px;
-    }
-</style>
+<link href="/statics/admin/css/cell_style.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -50,28 +22,19 @@
             <a class="btn btn-primary" href="{{ url_for('admin.添加方法') }}">添加方法</a>
         </div>
         <div class="ibox-content">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th style="width: 20%;">#</th>
-                        <th style="width: 30%;">名称</th>
-                        <th style="width: 30%;">路由</th>
-                        <th style="width: 20%;">操作</th>
-                    </tr>
-                </thead>
-            </table>
+            <br/>
             {% for value_模块 in 模块 %}
             <div class="ibox float-e-margins" id="模块{{ value_模块.module_id }}">
                 <div class="ibox-title">
                     <h5>{{ value_模块.名称 }}</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
+                    <div class="ibox-tools tooltip-demo">
+                        <a class="collapse-link" data-toggle="tooltip" data-placement="top" title="隐藏/展示">
                             <i class="fa fa-chevron-up"></i>
                         </a>
-                        <a href="{{ url_for('admin.修改模块', id=value_模块.module_id) }}">
+                        <a href="{{ url_for('admin.修改模块', id=value_模块.module_id) }}" data-toggle="tooltip" data-placement="top" title="修改">
                             <i class="fa fa-wrench"></i>
                         </a>
-                        <a onclick="delete_item('{{ value_模块.module_id }}')">
+                        <a onclick="delete_item('{{ value_模块.module_id }}')" data-toggle="tooltip" data-placement="top" title="删除">
                             <i class="fa fa-times"></i>
                         </a>
                     </div>
@@ -79,6 +42,16 @@
                 <div class="ibox-content">
                     <table class="table table-bordered">
                         <tbody>
+                            {% if loop.first == True %}
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%;">#</th>
+                                    <th style="width: 30%;">名称</th>
+                                    <th style="width: 30%;">路由</th>
+                                    <th style="width: 20%;">操作</th>
+                                </tr>
+                            </thead>
+                            {% endif %}
                             {% for value_方法 in 方法 %}
                             {% if value_方法.上级id == value_模块.module_id %}
                             <tr class="方法{{ value_方法.module_id }} 模块{{ value_模块.module_id }}"> 

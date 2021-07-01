@@ -5,7 +5,7 @@ class SysAd(db.Model):
     __tablename__ = 'sys_ad'
 
     ad_id = db.Column(db.Integer, primary_key=True)
-    adv_id = db.Column(db.Integer, nullable=False, default=0)
+    广告位 = db.Column(db.Integer, nullable=False, default=0)
     标题 = db.Column(db.String(255), unique=True, nullable=False, default='')
     图片 = db.Column(db.String(255), unique=True, nullable=False, default='')
     值 = db.Column(db.String(255), unique=True, nullable=False, default='')
