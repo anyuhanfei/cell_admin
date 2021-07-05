@@ -19,8 +19,10 @@
 <div class="wrapper wrapper-content animated fadeIn">
     <div class="row">
         <div class="ibox-content top-button">
+            {% if session['DEVELOPER'] == True %}
             <a class="btn btn-primary" href="{{ url_for('admin.添加广告位') }}">添加广告位</a>
             <a class="btn btn-primary" href="{{ url_for('admin.添加广告') }}">添加广告</a>
+            {% endif %}
         </div>
         <div class="ibox-content">
             <br/>
@@ -32,12 +34,14 @@
                         <a class="collapse-link" data-toggle="tooltip" data-placement="top" title="隐藏/展示">
                             <i class="fa fa-chevron-up"></i>
                         </a>
+                        {% if session['DEVELOPER'] == True %}
                         <a href="{{ url_for('admin.修改广告位', id=value_广告位.ad_id) }}" data-toggle="tooltip" data-placement="top" title="修改">
                             <i class="fa fa-wrench"></i>
                         </a>
                         <a onclick="delete_item('{{ value_广告位.ad_id }}')" data-toggle="tooltip" data-placement="top" title="删除">
                             <i class="fa fa-times"></i>
                         </a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -81,9 +85,11 @@
                                     <a class="btn btn-xs btn-primary" href="{{ url_for('admin.修改广告', id=value_广告.ad_id) }}">
                                         <i class="fa fa-wrench"></i> 修改
                                     </a>
+                                    {% if session['DEVELOPER'] == True %}
                                     <a class="btn btn-xs btn-danger" href="###" onclick="delete_item('{{ value_广告.ad_id }}')">
                                         <i class="fa fa-times"></i> 删除
                                     </a>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endif %}

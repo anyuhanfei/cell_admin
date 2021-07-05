@@ -16,11 +16,6 @@ def homepage():
     return render_template('admin/homepage.html')
 
 
-@admin.route('/admin/error')
-def error():
-    return render_template('admin/error.html')
-
-
 @admin.route('login')
 def login():
     return render_template('admin/login.html')
@@ -55,3 +50,18 @@ def uploadphoto():
     file_path = 保存图片(photo, 'editor')
 
     return 'http://' + request.host + '/' + file_path
+
+
+@admin.route('/admin/error')
+def error():
+    return render_template('admin/error/error_operation.html')
+
+
+@admin.route('/admin/error/admin_power')
+def error_admin_power():
+    return render_template('admin/error/error_admin_power.html')
+
+
+@admin.route('/admin/error/developer')
+def error_developer():
+    return render_template('admin/error/error_developer.html')

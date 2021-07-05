@@ -3,7 +3,7 @@
 '''
 from flask import render_template, request, redirect, url_for
 
-from . import admin, check_admin_login
+from . import admin, check_admin_login, check_admin_power
 from run import db
 from configs.common import return_data
 from configs.config import USER
@@ -15,6 +15,7 @@ from models.IdxUserData import IdxUserData
 
 @admin.route('/user/会员')
 @check_admin_login
+@check_admin_power
 def 会员():
     users = IdxUser.query.filter(IdxUser.is_delete == 0).all()
     identity_text = USER['USER_IDENTITY_TEXT']
@@ -23,6 +24,7 @@ def 会员():
 
 @admin.route('/user/添加会员')
 @check_admin_login
+@check_admin_power
 def 添加会员():
     identity_text = USER['USER_IDENTITY_TEXT']
 
@@ -31,6 +33,7 @@ def 添加会员():
 
 @admin.route('/user/添加会员提交', methods=['POST'])
 @check_admin_login
+@check_admin_power
 def 添加会员提交():
     nickname = request.form.get('nickname')
     account = request.form.get('account')
@@ -53,6 +56,7 @@ def 添加会员提交():
 
 @admin.route('/user/会员编辑/<int:id>')
 @check_admin_login
+@check_admin_power
 def 会员编辑(id):
     user = IdxUser.query.filter(IdxUser.user_id == id).first()
     if user is None:
@@ -63,6 +67,7 @@ def 会员编辑(id):
 
 @admin.route('/user/会员编辑提交/<int:id>/<int:code>', methods=["POST"])
 @check_admin_login
+@check_admin_power
 def 会员编辑提交(id, code):
     obj = IdxUser.query.filter(IdxUser.user_id == id).first()
     if obj is None:
@@ -99,6 +104,7 @@ def 会员编辑提交(id, code):
 
 @admin.route('/user/会员详情')
 @check_admin_login
+@check_admin_power
 def 会员详情():
     user = IdxUser.query.filter(IdxUser.user_id == id).first()
     if user is None:
@@ -108,6 +114,7 @@ def 会员详情():
 
 @admin.route('/user/会员充值/<int:id>')
 @check_admin_login
+@check_admin_power
 def 会员充值(id):
     user = IdxUser.query.filter(IdxUser.user_id == id).first()
     if user is None:
@@ -117,6 +124,7 @@ def 会员充值(id):
 
 @admin.route('/user/会员充值提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_power
 def 会员充值提交(id):
     fund_type = request.form.get('fund_type')
     radio_number = request.form.get('radio_number')
@@ -136,6 +144,7 @@ def 会员充值提交(id):
 
 @admin.route('/user/冻结会员提交/<int:id>', methods=["POST"])
 @check_admin_login
+@check_admin_power
 def 冻结会员提交(id):
     obj = IdxUser.query.filter(IdxUser.user_id == id).first()
     if obj is None:
@@ -148,7 +157,10 @@ def 冻结会员提交(id):
 
 @admin.route('/user/删除会员提交/<int:id>', methods=["POST"])
 @check_admin_login
+@check_admin_power
 def 删除会员提交(id):
+    if USER['UESR_DELETE'] is False:
+        return return_data(2, '', '禁止删除会员')
     obj = IdxUser.query.filter(IdxUser.user_id == id).first()
     if obj is None:
         return return_data(2, '', '非法操作')

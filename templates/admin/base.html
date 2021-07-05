@@ -62,6 +62,7 @@
                     </li>
                     {% for 一级目录 in session['目录'] %}
                     {% if 一级目录['上级id'] == 0 %}
+                    {% if (一级目录['名称'] != '开发者中心' and 一级目录['名称'] != '资源管理') or session['DEVELOPER'] == True %}
                     <li id='一级目录{{ 一级目录["catalog_id"] }}'>
                         <a class="catalog" href="#">
                             <i class="fa {{ 一级目录['图标'] }}"></i>
@@ -78,6 +79,7 @@
                             {% endfor %}
                         </ul>
                     </li>
+                    {% endif %}
                     {% endif %}
                     {% endfor %}
                 </ul>

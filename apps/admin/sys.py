@@ -3,7 +3,7 @@
 '''
 from flask import render_template, request, redirect, url_for
 
-from . import admin, check_admin_login, reading_data
+from . import admin, check_admin_login, reading_data, check_developer, check_admin_power, check_admin_developer
 from run import db
 from configs.common import return_data, 随机字符串
 
@@ -15,6 +15,7 @@ from models.SysAdmin import SysAdmin
 
 @admin.route('/adm/角色')
 @check_admin_login
+@check_admin_power
 def 角色():
     data = SysRole.query.filter().all()
     return render_template('/admin/adm/角色.html', data=data)
@@ -22,12 +23,14 @@ def 角色():
 
 @admin.route('/adm/添加角色')
 @check_admin_login
+@check_admin_power
 def 添加角色():
     return render_template('/admin/adm/添加角色.html')
 
 
 @admin.route('/adm/添加角色提交', methods=['POST'])
 @check_admin_login
+@check_admin_power
 def 添加角色提交():
     角色名 = request.form.get('角色名')
     备注 = request.form.get('备注')
@@ -40,6 +43,7 @@ def 添加角色提交():
 
 @admin.route('/adm/修改角色/<int:id>')
 @check_admin_login
+@check_admin_power
 def 修改角色(id):
     data = SysRole.query.filter(SysRole.role_id == id).first()
     if data is None:
@@ -49,6 +53,7 @@ def 修改角色(id):
 
 @admin.route('/adm/修改角色提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_power
 def 修改角色提交(id):
     角色名 = request.form.get('角色名')
     备注 = request.form.get('备注')
@@ -65,6 +70,7 @@ def 修改角色提交(id):
 
 @admin.route('/adm/修改角色权限/<int:id>')
 @check_admin_login
+@check_admin_power
 def 修改角色权限(id):
     if id == 1:
         return redirect(url_for('admin.error'))
@@ -83,6 +89,7 @@ def 修改角色权限(id):
 
 @admin.route('/adm/修改角色权限提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_power
 def 修改角色权限提交(id):
     if id == 1:
         return return_data(2, '', '不允许修改开发者角色的权限')
@@ -93,11 +100,13 @@ def 修改角色权限提交(id):
     data.权限 = action_ids
     db.session.add(data)
     db.session.commit()
+    reading_data()
     return return_data(1, '', '设置成功')
 
 
 @admin.route('/adm/删除角色提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_power
 def 删除角色提交(id):
     if id == 1:
         return return_data(2, '', '不允许删除开发者角色')
@@ -111,6 +120,7 @@ def 删除角色提交(id):
 
 @admin.route('/adm/管理员')
 @check_admin_login
+@check_admin_power
 def 管理员():
     data = SysAdmin.query.filter().all()
     角色 = SysRole.query.filter().all()
@@ -119,6 +129,7 @@ def 管理员():
 
 @admin.route('/adm/添加管理员')
 @check_admin_login
+@check_admin_power
 def 添加管理员():
     角色 = SysRole.query.filter().all()
     return render_template('admin/adm/添加管理员.html', 角色=角色)
@@ -126,6 +137,7 @@ def 添加管理员():
 
 @admin.route('/adm/添加管理员提交', methods=['POST'])
 @check_admin_login
+@check_admin_power
 def 添加管理员提交():
     account = request.form.get('account')
     nickname = request.form.get('nickname')
@@ -151,6 +163,7 @@ def 添加管理员提交():
 
 @admin.route('/adm/修改管理员/<int:id>')
 @check_admin_login
+@check_admin_power
 def 修改管理员(id):
     if id == 1:
         return redirect(url_for('admin.error'))
@@ -163,6 +176,7 @@ def 修改管理员(id):
 
 @admin.route('/adm/修改管理员提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_power
 def 修改管理员提交(id):
     account = request.form.get('account')
     nickname = request.form.get('nickname')
@@ -188,6 +202,7 @@ def 修改管理员提交(id):
 
 @admin.route('/adm/管理员角色设置/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_power
 def 管理员角色设置(id):
     role_id = request.form.get('role_id')
     role = SysRole.query.filter(SysRole.role_id == role_id).first()
@@ -199,11 +214,13 @@ def 管理员角色设置(id):
     data.role_id = role_id
     db.session.add(data)
     db.session.commit()
+    reading_data()
     return return_data(1, '', '设置成功')
 
 
 @admin.route('/adm/删除管理员提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_power
 def 删除管理员提交(id):
     data = SysAdmin.query.filter(SysAdmin.admin_id == id).first()
     if data is None:
@@ -215,6 +232,8 @@ def 删除管理员提交(id):
 
 @admin.route('sys/目录')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 目录():
     一级目录 = SysCatalog.query.filter(SysCatalog.上级id == 0).order_by(SysCatalog.排序.asc()).all()
     二级目录 = SysCatalog.query.filter(SysCatalog.上级id != 0).order_by(SysCatalog.排序.asc()).all()
@@ -223,6 +242,8 @@ def 目录():
 
 @admin.route('sys/添加一级目录')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加一级目录():
     一级目录 = SysCatalog.query.filter(SysCatalog.上级id == 0).order_by(SysCatalog.排序.asc()).all()
     return render_template('admin/sys/添加一级目录.html', 一级目录=一级目录)
@@ -230,6 +251,8 @@ def 添加一级目录():
 
 @admin.route('sys/添加一级目录提交', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加一级目录提交():
     名称 = request.form.get('名称')
     图标 = request.form.get('图标')
@@ -244,6 +267,8 @@ def 添加一级目录提交():
 
 @admin.route('sys/添加二级目录')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加二级目录():
     一级目录 = SysCatalog.query.filter(SysCatalog.上级id == 0).order_by(SysCatalog.排序.asc()).all()
     二级目录 = SysCatalog.query.filter(SysCatalog.上级id != 0).order_by(SysCatalog.排序.asc()).all()
@@ -252,6 +277,8 @@ def 添加二级目录():
 
 @admin.route('sys/添加二级目录提交', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加二级目录提交():
     名称 = request.form.get('名称')
     上级id = request.form.get('上级id')
@@ -267,6 +294,8 @@ def 添加二级目录提交():
 
 @admin.route('sys/修改一级目录/<int:id>')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改一级目录(id):
     data = SysCatalog.query.filter(SysCatalog.catalog_id == id).first()
     if data is None:
@@ -277,6 +306,8 @@ def 修改一级目录(id):
 
 @admin.route('sys/修改一级目录提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改一级目录提交(id):
     名称 = request.form.get('名称')
     图标 = request.form.get('图标')
@@ -296,6 +327,8 @@ def 修改一级目录提交(id):
 
 @admin.route('sys/修改二级目录/<int:id>')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改二级目录(id):
     data = SysCatalog.query.filter(SysCatalog.catalog_id == id).first()
     if data is None:
@@ -307,6 +340,8 @@ def 修改二级目录(id):
 
 @admin.route('sys/修改二级目录提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改二级目录提交(id):
     名称 = request.form.get('名称')
     上级id = request.form.get('上级id')
@@ -328,6 +363,8 @@ def 修改二级目录提交(id):
 
 @admin.route('sys/删除目录提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 删除目录提交(id):
     data = SysCatalog.query.filter(SysCatalog.catalog_id == id).first()
     if data is None:
@@ -344,6 +381,8 @@ def 删除目录提交(id):
 
 @admin.route('sys/模块')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 模块():
     模块 = SysModule.query.filter(SysModule.上级id == 0).order_by(SysModule.排序.asc()).all()
     方法 = SysModule.query.filter(SysModule.上级id != 0).order_by(SysModule.排序.asc()).all()
@@ -352,6 +391,8 @@ def 模块():
 
 @admin.route('sys/添加模块')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加模块():
     模块 = SysModule.query.filter(SysModule.上级id == 0).order_by(SysModule.排序.asc()).all()
     return render_template('admin/sys/添加模块.html', 模块=模块)
@@ -359,6 +400,8 @@ def 添加模块():
 
 @admin.route('sys/添加模块提交', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加模块提交():
     名称 = request.form.get('名称')
     排序 = request.form.get('排序')
@@ -371,6 +414,8 @@ def 添加模块提交():
 
 @admin.route('sys/添加方法')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加方法():
     模块 = SysModule.query.filter(SysModule.上级id == 0).order_by(SysModule.排序.asc()).all()
     方法 = SysModule.query.filter(SysModule.上级id != 0).order_by(SysModule.排序.asc()).all()
@@ -379,6 +424,8 @@ def 添加方法():
 
 @admin.route('sys/添加方法提交', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加方法提交():
     名称 = request.form.get('名称')
     上级id = request.form.get('上级id')
@@ -393,6 +440,8 @@ def 添加方法提交():
 
 @admin.route('sys/修改模块/<int:id>')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改模块(id):
     data = SysModule.query.filter(SysModule.module_id == id).first()
     if data is None:
@@ -403,6 +452,8 @@ def 修改模块(id):
 
 @admin.route('sys/修改模块提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改模块提交(id):
     名称 = request.form.get('名称')
     排序 = request.form.get('排序')
@@ -419,6 +470,8 @@ def 修改模块提交(id):
 
 @admin.route('sys/修改方法/<int:id>')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改方法(id):
     data = SysModule.query.filter(SysModule.module_id == id).first()
     if data is None:
@@ -430,6 +483,8 @@ def 修改方法(id):
 
 @admin.route('sys/修改方法提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改方法提交(id):
     名称 = request.form.get('名称')
     上级id = request.form.get('上级id')
@@ -450,6 +505,8 @@ def 修改方法提交(id):
 
 @admin.route('sys/删除模块提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 删除模块提交(id):
     data = SysModule.query.filter(SysModule.module_id == id).first()
     if data is None:
@@ -465,47 +522,63 @@ def 删除模块提交(id):
 
 @admin.route('resource/表格')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 表格():
     return render_template('admin/resource/表格.html')
 
 
 @admin.route('resource/表单')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 基本表单():
     return render_template('admin/resource/表单.html')
 
 
 @admin.route('resource/提示框')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 提示框():
     return render_template('admin/resource/提示框.html')
 
 
 @admin.route('resource/加载按钮')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 加载按钮():
     return render_template('admin/resource/加载按钮.html')
 
 
 @admin.route('resource/图标')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 图标():
     return render_template('admin/resource/图标.html')
 
 
 @admin.route('resource/徽章')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 徽章():
     return render_template('admin/resource/徽章.html')
 
 
 @admin.route('resource/栅格')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 栅格():
     return render_template('admin/resource/栅格.html')
 
 
 @admin.route('resource/css辅助')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def css辅助():
     return render_template('admin/resource/css辅助.html')

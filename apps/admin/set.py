@@ -4,7 +4,7 @@
 
 from flask import render_template, request, redirect, url_for
 
-from . import admin, check_admin_login
+from . import admin, check_admin_login, check_developer, check_admin_power, check_admin_developer
 from run import db
 from configs.common import return_data, 保存图片, 删除图片
 
@@ -14,6 +14,7 @@ from models.SysSetting import SysSetting
 
 @admin.route('set/广告')
 @check_admin_login
+@check_admin_power
 def 广告():
     广告位 = SysAd.query.filter(SysAd.广告位 == 0).all()
     广告 = SysAd.query.filter(SysAd.广告位 != 0).all()
@@ -22,12 +23,16 @@ def 广告():
 
 @admin.route('set/添加广告位')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加广告位():
     return render_template('/admin/set/添加广告位.html')
 
 
 @admin.route('set/添加广告位提交', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加广告位提交():
     标题 = request.form.get('标题')
     if 标题 == '':
@@ -40,6 +45,8 @@ def 添加广告位提交():
 
 @admin.route('set/添加广告')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加广告():
     广告位 = SysAd.query.filter(SysAd.广告位 == 0).all()
     return render_template('/admin/set/添加广告.html', 广告位=广告位)
@@ -47,6 +54,8 @@ def 添加广告():
 
 @admin.route('set/添加广告提交', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加广告提交():
     标题 = request.form.get('标题')
     广告位 = request.form.get('广告位')
@@ -73,6 +82,8 @@ def 添加广告提交():
 
 @admin.route('set/修改广告位/<int:id>')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改广告位(id):
     data = SysAd.query.filter(SysAd.ad_id == id).first()
     if data is None or data.广告位 != 0:
@@ -82,6 +93,8 @@ def 修改广告位(id):
 
 @admin.route('set/修改广告位提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改广告位提交(id):
     标题 = request.form.get('标题')
     if 标题 == '' or 标题 is None:
@@ -95,6 +108,7 @@ def 修改广告位提交(id):
 
 @admin.route('set/修改广告/<int:id>')
 @check_admin_login
+@check_admin_power
 def 修改广告(id):
     data = SysAd.query.filter(SysAd.ad_id == id).first()
     if data is None or data.广告位 == 0:
@@ -106,6 +120,7 @@ def 修改广告(id):
 
 @admin.route('set/修改广告提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_power
 def 修改广告提交(id):
     标题 = request.form.get('标题')
     广告位 = request.form.get('广告位')
@@ -140,6 +155,8 @@ def 修改广告提交(id):
 
 @admin.route('set/删除广告提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 删除广告提交(id):
     data = SysAd.query.filter(SysAd.ad_id == id).first()
     if data is None:
@@ -153,6 +170,7 @@ def 删除广告提交(id):
 
 @admin.route('set/参数')
 @check_admin_login
+@check_admin_power
 def 参数():
     分组 = SysSetting.query.filter(SysSetting.上级id == 0).all()
     参数 = SysSetting.query.filter(SysSetting.上级id != 0).all()
@@ -161,6 +179,8 @@ def 参数():
 
 @admin.route('set/添加参数分组')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加参数分组():
     分组 = SysSetting.query.filter(SysSetting.上级id == 0).order_by(SysSetting.排序.asc()).all()
     return render_template('/admin/set/添加参数分组.html', 分组=分组)
@@ -168,6 +188,8 @@ def 添加参数分组():
 
 @admin.route('set/添加参数分组提交', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加参数分组提交():
     标题 = request.form.get('标题')
     排序 = request.form.get('排序')
@@ -180,6 +202,8 @@ def 添加参数分组提交():
 
 @admin.route('set/添加参数')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加参数():
     分组 = SysSetting.query.filter(SysSetting.上级id == 0).order_by(SysSetting.排序.asc()).all()
     参数 = SysSetting.query.filter(SysSetting.上级id != 0).order_by(SysSetting.排序.asc()).all()
@@ -188,6 +212,8 @@ def 添加参数():
 
 @admin.route('set/添加参数提交', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 添加参数提交():
     标题 = request.form.get('标题')
     上级id = request.form.get('上级id')
@@ -205,6 +231,8 @@ def 添加参数提交():
 
 @admin.route('set/修改参数分组/<int:id>')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改参数分组(id):
     data = SysSetting.query.filter(SysSetting.id == id).first()
     if data is None or data.上级id != 0:
@@ -215,6 +243,8 @@ def 修改参数分组(id):
 
 @admin.route('set/修改参数分组提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改参数分组提交(id):
     标题 = request.form.get('标题')
     排序 = request.form.get('排序')
@@ -231,6 +261,8 @@ def 修改参数分组提交(id):
 
 @admin.route('set/修改参数/<int:id>')
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改参数(id):
     data = SysSetting.query.filter(SysSetting.id == id).first()
     if data is None or data.上级id == 0:
@@ -242,6 +274,8 @@ def 修改参数(id):
 
 @admin.route('set/修改参数提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 修改参数提交(id):
     标题 = request.form.get('标题')
     上级id = request.form.get('上级id')
@@ -264,6 +298,7 @@ def 修改参数提交(id):
 
 @admin.route('set/参数值提交', methods=['POST'])
 @check_admin_login
+@check_admin_power
 def 参数值提交():
     data = request.form
     for key, value in data.items():
@@ -277,6 +312,8 @@ def 参数值提交():
 
 @admin.route('set/删除参数提交/<int:id>', methods=['POST'])
 @check_admin_login
+@check_admin_developer
+@check_developer
 def 删除参数提交(id):
     data = SysSetting.query.filter(SysSetting.id == id).first()
     if data is None:

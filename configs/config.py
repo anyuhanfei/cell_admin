@@ -1,5 +1,9 @@
 APP_DEBUG = True
 
+# power
+DEVELOPER = True
+ADMIN_POWER = False
+
 # Database
 DATABASE = {
     'TYPE': 'mysql',
@@ -23,4 +27,5 @@ USER = {
     'USER_DATA_KEYS': [
         'vio', '标签', 'phone', 'email'
     ],
+    'USER_DELETE': False,  # 会员删除是否使用
 }

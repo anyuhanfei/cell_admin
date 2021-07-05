@@ -72,12 +72,23 @@
                 标题: 标题,
             },
             success: function (data) {
+                console.log(data.code)
+                console.log(data.code == undefined)
+                if(data.code == undefined){
+                    window.location.href = "{{ url_for('admin.error_admin_power') }}"
+                }
                 if (data.code == 1) {
                     cell_msg('success', '添加广告位', data.msg)
                     $("#标题").val('')
                 } else {
                     cell_msg('error', '添加广告位', data.msg)
                 }
+            },
+            complete: function(jqXHR){
+                console.log(jqXHR);
+            },
+            error: function (xhr) {
+                console.log(xhr);
             }
         })
     })

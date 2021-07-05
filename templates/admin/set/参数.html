@@ -18,8 +18,10 @@
 <div class="wrapper wrapper-content animated fadeIn">
     <div class="row">
         <div class="ibox-content top-button">
+            {% if session['DEVELOPER'] == True %}
             <a class="btn btn-primary" href="{{ url_for('admin.添加参数分组') }}">添加参数分组</a>
             <a class="btn btn-primary" href="{{ url_for('admin.添加参数') }}">添加参数</a>
+            {% endif %}
         </div>
         <div class="ibox-content">
             <br/>
@@ -36,6 +38,7 @@
                                 <a data-toggle="tab" href="#tab-{{ value.id }}"> {{ value.标题 }}</a>
                             </li>
                             {% endfor %}
+                            {% if session['DEVELOPER'] == True %}
                             <div class="ibox-tools tooltip-demo" style="margin-top: 10px; width: 500px; float: right;">
                                 <a href="###" data-toggle="tooltip" data-placement="top" title="修改当前分组" onclick="修改分组()">
                                     <i class="fa fa-wrench"></i>
@@ -44,6 +47,7 @@
                                     <i class="fa fa-times"></i>
                                 </a>
                             </div>
+                            {% endif %}
                         </ul>
                         <div class="tab-content">
                             {% for 分组_value in 分组 %}
@@ -63,6 +67,7 @@
                                             <h6>{{ 参数_value.备注 }}</h6>
                                         </div>
                                         <label class="col-sm-2 control-label" style="height: 67px;">
+                                            {% if session['DEVELOPER'] == True %}
                                             <div class="ibox-tools tooltip-demo">
                                                 <a href="{{ url_for('admin.修改参数', id=参数_value.id) }}" data-toggle="tooltip" data-placement="top" title="修改">
                                                     <i class="fa fa-wrench"></i>
@@ -71,12 +76,12 @@
                                                     <i class="fa fa-times"></i>
                                                 </a>
                                             </div>
+                                            {% endif %}
                                         </label>
                                     </div>
                                     {% endif %}
                                     {% endfor %}
                                     <div class="col-sm-4 col-sm-offset-4">
-                                        <button class="btn btn-white" type="button" id="cancel">取消</button>
                                         <div class="btn btn-primary" onclick="submit('{{ 分组_value.id }}')">设置</div>
                                     </div>
                                 </div>
