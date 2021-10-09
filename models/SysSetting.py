@@ -14,3 +14,7 @@ class SysSetting(db.Model):
 
     def __repe__(self):
         return "<sys_ad:%s %s>" % (self.id, self.标题)
+
+    @classmethod
+    def get_data(cls, id):
+        return cls.query.filter(SysSetting.id == key).first()

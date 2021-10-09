@@ -1,0 +1,86 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+<link href="/statics/admin/css/cell_style.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>会员操作日志</h2>
+        <ol class="breadcrumb">
+            
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox-content top-button">
+            <div class="ibox-content form-inline">
+                <div class="form-group">
+                    <label for="管理员账号" class="sr-only">管理员账号</label>
+                    <input type="text" placeholder="管理员账号" id="管理员账号" class="form-control" value="{{ parameters.管理员账号 }}">
+                </div>
+                <button class="btn btn-white" type="button" onclick="form_submit()">搜索</button>
+                <button class="btn btn-white" type="button" onclick="form_close()">清空</button>
+                <script>
+                    function form_submit(){
+                        var parameter = ['管理员账号']
+                        var location_href = "/admin/log/管理员操作日志/1?is_search=1"
+                        for (const key in parameter) {
+                            value = $("#" + parameter[key]).val()
+                            if(value != '' && value != 'None'){
+                                location_href += '&' + parameter[key] + '=' + value
+                            }
+                        }
+                        window.location.href = location_href
+                    }
+
+                    function form_close(){
+                        $("#管理员账号").val('')
+                        form_submit()
+                    }
+                </script>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">#</th>
+                        <th style="width: 20%;">管理员信息</th>
+                        <th style="width: 25%;">说明</th>
+                        <th style="width: 20%;">时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for value in models.items %}
+                    <tr id="tr{{ value.id }}">
+                        <td>{{ value.id }}</td>
+                        <td>{{ value.admin.account }}</td>
+                        <td>
+                            {{ value.说明 }}
+                        </td>
+                        <td>
+                            {{ value.操作时间 }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div style="padding-bottom: 20px;">
+                {% import 'admin/pages.html' as pg %}
+                {{ pg.my_paginate(models,'admin.会员操作日志') }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="/statics/layer/layer.js"></script>
+
+{% endblock %}

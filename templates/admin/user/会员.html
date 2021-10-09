@@ -18,31 +18,67 @@
 <div class="wrapper wrapper-content animated fadeIn">
     <div class="row">
         <div class="ibox-content top-button">
-            <a class="btn btn-primary" href="{{ url_for('admin.添加会员') }}">添加会员</a>
+            <div class="ibox-content form-inline">
+                <a class="btn btn-primary" href="{{ url_for('admin.添加会员') }}" style="margin-right: 100px;">添加会员</a>
+                <div class="form-group">
+                    <label for="account" class="sr-only">会员手机号</label>
+                    <input type="text" placeholder="会员手机号" id="account" class="form-control" value="{{ parameters.account }}">
+                </div>
+                <div class="form-group">
+                    <select class="form-control" id="is_freeze">
+                        <option value="">状态</option>
+                        <option value="0" {% if parameters.is_freeze == '0' %}selected{% endif %}>正常</option>
+                        <option value="1" {% if parameters.is_freeze == '1' %}selected{% endif %}>已冻结</option>
+                    </select>
+                </div>
+                <button class="btn btn-white" type="button" onclick="form_submit()">搜索</button>
+                <button class="btn btn-white" type="button" onclick="form_close()">清空</button>
+                <script>
+                    function form_submit(){
+                        var parameter = ['account', 'is_freeze']
+                        var location_href = "/admin/user/会员/1?is_search=1"
+                        for (const key in parameter) {
+                            value = $("#" + parameter[key]).val()
+                            if(value != '' && value != 'None'){
+                                location_href += '&' + parameter[key] + '=' + value
+                            }
+                        }
+                        window.location.href = location_href
+                    }
+
+                    function form_close(){
+                        $("#account").val('')
+                        $("#is_freeze").val('')
+                        form_submit()
+                    }
+                </script>
+            </div>
         </div>
         <div class="ibox-content">
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th style="width: 6%;">#</th>
-                        <th style="width: 10%;">昵称</th>
                         <th style="width: 10%;">{{ identity_text }}</th>
-                        <th style="width: 40%;">余额</th>
+                        <th style="width: 30%;">余额</th>
+                        <th style="width: 10%;">注册时间</th>
+                        <th style="width: 10%;">状态</th>
                         <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in users %}
+                    {% for item in models.items %}
                     <tr id="tr{{ item.user_id }}">
                         <td>{{ item.user_id }}</td>
-                        <td>{{ item.nickname }}</td>
                         <td><span class="{{ item.get_data('标签') }}">{{ item.account }}</span></td>
                         <td>
-                            {% for fund in item.fund() %}
-                                {{ fund[2] }}: {{ fund[1] }}
+                            {% for key, value in item.fund().items() %}
+                                {{ key }}: {{ value }}
                                 {% if loop.index % 3 == 0 %}<br/>{% else %}&nbsp;&nbsp;&nbsp;&nbsp;{% endif %}
                             {% endfor %}
                         </td>
+                        <td>{{ item.register_time }}</td>
+                        <td id="freezeshow{{ item.user_id }}">{{ item.is_freeze_text() }}</td>
                         <td>
                             <a class="btn btn-xs btn-primary" href="{{ url_for('admin.会员编辑', id=item.user_id) }}">
                                 <i class="fa fa-wrench"></i> 编辑
@@ -78,7 +114,10 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <div style="padding-bottom: 20px;"></div>
+            <div style="padding-bottom: 20px;">
+                {% import 'admin/pages.html' as pg %}
+                {{ pg.my_paginate(models,'admin.会员') }}
+            </div>
         </div>
     </div>
 </div>
@@ -131,8 +170,10 @@
                         $("#unfreeze" + id).hide()
                         if(data.data == 1){
                             $("#unfreeze" + id).show()
+                            $("#freezeshow" + id).html('冻结')
                         }else{
                             $("#freeze" + id).show()
+                            $("#freezeshow" + id).html('正常')
                         }
                     }else{
                         cell_msg('error', '冻结/解冻会员', data.msg)

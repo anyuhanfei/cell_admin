@@ -75,7 +75,7 @@
 {% block js %}
 <script>
     function bank() {
-        window.location.href = "{{ url_for('admin.会员') }}"
+        window.location.href = "{{ url_for('admin.会员', page=1) }}"
     }
 
     $("#cancel").click(function () {

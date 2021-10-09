@@ -1,4 +1,5 @@
 import hashlib
+import datetime
 
 from run import db
 
@@ -21,6 +22,9 @@ class IdxUser(db.Model):
     top_id = db.Column(db.Integer, unique=True, nullable=False, default=0)
     is_freeze = db.Column(db.Integer, unique=True, nullable=False, default=0)
     is_delete = db.Column(db.Integer, unique=True, nullable=False, default=0)
+    register_time = db.Column(db.Date, default=datetime.datetime.now)
+
+    logs = db.relationship('LogUserFund', backref="user")
 
     def __repe__(self):
         return "<sys_ad:%s %s>" % (self.user_id, self.identity)
@@ -52,15 +56,16 @@ class IdxUser(db.Model):
     def fund(self):
         '''获取会员余额'''
         funds = IdxUserFund.get_all_coin(self.user_id)
-        if len(funds) == 0:
-            IdxUserFund.create_all_data(self.user_id)
-            funds = IdxUserFund.get_all_coin(self.user_id)
-        data = []
+        data = dict()
         for i in funds:
-            data.append([i.币种, i.金额, USER['USER_FUND_TYPE'][i.币种]])
+            if i.币种 in USER['USER_FUND_TYPE']:
+                data[i.币种] = i.金额
         return data
 
     def get_data(self, key):
         '''获取会员数据'''
         data = IdxUserData.get_data(self.user_id, key)
         return data.value
+
+    def is_freeze_text(self):
+        return ['正常', '冻结'][self.is_freeze]

@@ -12,6 +12,9 @@ class SysAdmin(db.Model):
     password = db.Column(db.String(255), unique=True)
     password_salt = db.Column(db.String(255), unique=True)
     nickname = db.Column(db.String(255), unique=True)
+    is_delete = db.Column(db.Integer, unique=True, nullable=False, default=0)
+
+    logs = db.relationship('LogAdmin', backref="admin")
 
     def __repr__(self):
         return "<sys_admin: %s %s %s %s>" % (self.admin_id, self.account, self.nickname, self.role_id)

@@ -3,9 +3,9 @@
 '''
 from flask import render_template, request, redirect, url_for
 
-from . import admin, check_admin_login, reading_data, check_developer, check_admin_power, check_admin_developer
+from . import admin, check_admin_login, reading_data, check_developer, check_admin_power, check_admin_developer, return_data
 from run import db
-from configs.common import return_data, 随机字符串
+from configs.common import 随机字符串
 
 from models.SysCatalog import SysCatalog
 from models.SysModule import SysModule
@@ -38,7 +38,7 @@ def 添加角色提交():
     role = SysRole(角色名=角色名, 备注=备注)
     db.session.add(role)
     db.session.commit()
-    return return_data(1, '', '添加成功')
+    return return_data(1, '', '添加成功', '添加角色:' + 角色名)
 
 
 @admin.route('/adm/修改角色/<int:id>')
@@ -65,7 +65,7 @@ def 修改角色提交(id):
     data.备注 = 备注
     db.session.add(data)
     db.session.commit()
-    return return_data(1, '', '修改成功')
+    return return_data(1, '', '修改成功', '修改角色：' + data.角色名)
 
 
 @admin.route('/adm/修改角色权限/<int:id>')
@@ -101,7 +101,7 @@ def 修改角色权限提交(id):
     db.session.add(data)
     db.session.commit()
     reading_data()
-    return return_data(1, '', '设置成功')
+    return return_data(1, '', '设置成功', '设置角色权限:' + data.角色名)
 
 
 @admin.route('/adm/删除角色提交/<int:id>', methods=['POST'])
@@ -115,7 +115,7 @@ def 删除角色提交(id):
         return return_data(2, '', '非法操作')
     db.session.delete(data)
     db.session.commit()
-    return return_data(1, '', '删除成功')
+    return return_data(1, '', '删除成功', '删除角色:' + data.角色名)
 
 
 @admin.route('/adm/管理员')
@@ -158,7 +158,7 @@ def 添加管理员提交():
     )
     db.session.add(admin)
     db.session.commit()
-    return return_data(1, '', '添加成功')
+    return return_data(1, '', '添加成功', '添加管理员:' + account)
 
 
 @admin.route('/adm/修改管理员/<int:id>')
@@ -197,7 +197,7 @@ def 修改管理员提交(id):
     data.role_id = role_id
     db.session.add(data)
     db.session.commit()
-    return return_data(1, '', '修改成功')
+    return return_data(1, '', '修改成功', '修改管理员信息:' + data.account)
 
 
 @admin.route('/adm/管理员角色设置/<int:id>', methods=['POST'])
@@ -215,7 +215,7 @@ def 管理员角色设置(id):
     db.session.add(data)
     db.session.commit()
     reading_data()
-    return return_data(1, '', '设置成功')
+    return return_data(1, '', '设置成功', '设置管理员' + data.account + '角色为' + role.角色名)
 
 
 @admin.route('/adm/删除管理员提交/<int:id>', methods=['POST'])
@@ -225,9 +225,10 @@ def 删除管理员提交(id):
     data = SysAdmin.query.filter(SysAdmin.admin_id == id).first()
     if data is None:
         return return_data(2, '', '非法操作')
-    db.session.delete(data)
+    obj.is_delete = 1
+    db.session.add(obj)
     db.session.commit()
-    return return_data(1, '', '删除成功')
+    return return_data(1, '', '删除成功', '删除管理员' + account)
 
 
 @admin.route('sys/目录')

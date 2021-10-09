@@ -5,9 +5,9 @@ import time
 
 from flask import render_template, request, redirect, url_for
 
-from . import admin, check_admin_login, check_admin_power
+from . import admin, check_admin_login, check_admin_power, return_data
 from run import db
-from configs.common import return_data, 保存图片
+from configs.common import 保存图片
 
 from models.SysArticleTag import SysArticleTag
 from models.SysArticle import SysArticle
@@ -43,7 +43,7 @@ def 添加文章标签提交(category):
     obj = SysArticleTag(name=name, image=image_path, type=category)
     db.session.add(obj)
     db.session.commit()
-    return return_data(1, '', '添加成功')
+    return return_data(1, '', '添加成功', '添加文章标签/分类:' + name)
 
 
 @admin.route('/article/修改文章标签/<int:id>')
@@ -72,7 +72,7 @@ def 修改文章标签提交(id):
     obj.name = name
     db.session.add(obj)
     db.session.commit()
-    return return_data(1, '', '修改成功')
+    return return_data(1, '', '修改成功', '修改文章标签/分类:' + obj.name)
 
 
 @admin.route('/article/删除文章标签提交/<int:id>', methods=["POST"])
@@ -85,7 +85,7 @@ def 删除文章标签提交(id):
     obj.is_delete = 1
     db.session.add(obj)
     db.session.commit()
-    return return_data(1, '', '修改成功')
+    return return_data(1, '', '修改成功', '删除文章标签/分类:' + obj.name)
 
 
 @admin.route('/article/文章')
@@ -128,7 +128,7 @@ def 添加文章提交():
     obj = SysArticle(title=title, category_id=category_id, tag_ids=tag_ids, intro=intro, keyword=keyword, author=author, content=content, image=image_path, insert_time=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     db.session.add(obj)
     db.session.commit()
-    return return_data(1, '', '添加成功')
+    return return_data(1, '', '添加成功', '添加文章:' + title)
 
 
 @admin.route('/article/修改文章/<int:id>')
@@ -173,7 +173,7 @@ def 修改文章提交(id):
     obj.content = content
     db.session.add(obj)
     db.session.commit()
-    return return_data(1, '', '修改成功')
+    return return_data(1, '', '修改成功', '修改文章:' + obj.title)
 
 
 @admin.route('/article/删除文章提交/<int:id>', methods=["POST"])
@@ -186,4 +186,4 @@ def 删除文章提交(id):
     obj.is_delete = 1
     db.session.add(obj)
     db.session.commit()
-    return return_data(1, '', '修改成功')
+    return return_data(1, '', '修改成功', '删除文章:' + obj.title)

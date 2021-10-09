@@ -39,15 +39,15 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        {% for item in user.fund() %}
-                                        <th>{{ item[2] }}</th>
+                                        {% for key, value in user.fund().items() %}
+                                        <th>{{ key }}</th>
                                         {% endfor %}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        {% for item in user.fund() %}
-                                        <td>{{ item[1] }}</td>
+                                        {% for key, value in user.fund().items() %}
+                                        <th>{{ value }}</th>
                                         {% endfor %}
                                     </tr>
                                 </tbody>
@@ -58,8 +58,8 @@
                         <label class="col-sm-2 control-label">选择币种</label>
                         <div class="col-sm-9">
                             <div>
-                                {% for item in funds %}
-                                    <label><input type="radio" value="{{ item[0] }}" id="" name="fund_type"> {{ item[2] }} </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                {% for key, value in user.fund().items() %}
+                                    <label><input type="radio" value="{{ key }}" id="" name="fund_type"> {{ key }} </label>&nbsp;&nbsp;&nbsp;&nbsp;
                                 {% endfor %}
                             </div>
                         </div>
@@ -97,7 +97,7 @@
 {% block js %}
 <script>
     function bank() {
-        window.location.href = "{{ url_for('admin.会员') }}"
+        window.location.href = "{{ url_for('admin.会员', page=1) }}"
     }
 
     $("#cancel").click(function () {

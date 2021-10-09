@@ -64,7 +64,7 @@
                                         <label class="col-sm-4 control-label" style="height: 67px; text-align: right;">{{ 参数_value.标题 }}</label>
                                         <div class="col-sm-6">
                                             <input type="{{ 参数_value.类型 }}" name="{{ 参数_value.id }}" class="form-control" value="{{ 参数_value.值 }}">
-                                            <h6>{{ 参数_value.备注 }}</h6>
+                                            <h5 class="text-danger">{{ 参数_value.备注 }}</h5>
                                         </div>
                                         <label class="col-sm-2 control-label" style="height: 67px;">
                                             {% if session['DEVELOPER'] == True %}

@@ -4,9 +4,9 @@
 
 from flask import render_template, request, redirect, url_for
 
-from . import admin, check_admin_login, check_developer, check_admin_power, check_admin_developer
+from . import admin, check_admin_login, check_developer, check_admin_power, check_admin_developer, return_data
 from run import db
-from configs.common import return_data, 保存图片, 删除图片
+from configs.common import 保存图片, 删除图片
 
 from models.SysAd import SysAd
 from models.SysSetting import SysSetting
@@ -40,7 +40,7 @@ def 添加广告位提交():
     广告位 = SysAd(标题=标题)
     db.session.add(广告位)
     db.session.commit()
-    return return_data(1, '', '添加成功')
+    return return_data(1, '', '添加成功', '添加广告位:' + 标题)
 
 
 @admin.route('set/添加广告')
@@ -77,7 +77,7 @@ def 添加广告提交():
     db.session.add(广告)
     db.session.commit()
 
-    return return_data(1, '', '添加成功')
+    return return_data(1, '', '添加成功', '添加广告:' + 标题)
 
 
 @admin.route('set/修改广告位/<int:id>')
@@ -103,7 +103,7 @@ def 修改广告位提交(id):
     data.标题 = 标题
     db.session.add(data)
     db.session.commit()
-    return return_data(1, '', '修改成功')
+    return return_data(1, '', '修改成功', '修改广告位:' + data.标题)
 
 
 @admin.route('set/修改广告/<int:id>')
@@ -150,7 +150,7 @@ def 修改广告提交(id):
         data.富文本 = request.form.get('富文本')
     db.session.add(data)
     db.session.commit()
-    return return_data(1, '', '修改成功')
+    return return_data(1, '', '修改成功', '修改广告:' + data.标题)
 
 
 @admin.route('set/删除广告提交/<int:id>', methods=['POST'])
@@ -165,7 +165,7 @@ def 删除广告提交(id):
     db.session.delete(data)
     db.session.commit()
     删除图片(image_path)
-    return return_data(1, '', '删除成功')
+    return return_data(1, '', '删除成功', '删除广告/广告位:' + data.标题)
 
 
 @admin.route('set/参数')
@@ -197,7 +197,7 @@ def 添加参数分组提交():
     data = SysSetting(标题=标题, 排序=排序)
     db.session.add(data)
     db.session.commit()
-    return return_data(1, '', '添加成功')
+    return return_data(1, '', '添加成功', '添加参数分组:' + 标题)
 
 
 @admin.route('set/添加参数')
@@ -226,7 +226,7 @@ def 添加参数提交():
     data = SysSetting(标题=标题, 上级id=上级id, 类型=类型, 排序=排序, 备注=备注)
     db.session.add(data)
     db.session.commit()
-    return return_data(1, '', '添加成功')
+    return return_data(1, '', '添加成功', '添加参数:' + 标题)
 
 
 @admin.route('set/修改参数分组/<int:id>')
@@ -256,7 +256,7 @@ def 修改参数分组提交(id):
     data.排序 = 排序
     db.session.add(data)
     db.session.commit()
-    return return_data(1, '', '修改成功')
+    return return_data(1, '', '修改成功', '修改参数分组:' + data.标题)
 
 
 @admin.route('set/修改参数/<int:id>')
@@ -293,7 +293,7 @@ def 修改参数提交(id):
     data.排序 = 排序
     db.session.add(data)
     db.session.commit()
-    return return_data(1, '', '修改成功')
+    return return_data(1, '', '修改成功', '修改参数:' + data.标题)
 
 
 @admin.route('set/参数值提交', methods=['POST'])
@@ -301,13 +301,18 @@ def 修改参数提交(id):
 @check_admin_power
 def 参数值提交():
     data = request.form
+    log_content = ''
     for key, value in data.items():
-        data = SysSetting.query.filter(SysSetting.id == key).first()
-        if data:
+        data = SysSetting.get_data(key)
+        if data is not None and str(data.值) != str(value):
             data.值 = value
             db.session.add(data)
             db.session.commit()
-    return return_data(1, '', '修改成功')
+            if log_content == '':
+                log_content += '修改参数值: 将' + data.标题 + '的值修改为' + data.值
+            else:
+                log_content += ' | 将' + data.标题 + '的值修改为' + data.值
+    return return_data(1, '', '修改成功', log_content)
 
 
 @admin.route('set/删除参数提交/<int:id>', methods=['POST'])
@@ -320,4 +325,4 @@ def 删除参数提交(id):
         return return_data(2, '', '非法操作')
     db.session.delete(data)
     db.session.commit()
-    return return_data(1, '', '删除成功')
+    return return_data(1, '', '删除成功', '删除参数/分组:' + data.标题)

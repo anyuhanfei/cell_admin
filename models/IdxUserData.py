@@ -24,8 +24,8 @@ class IdxUserData(db.Model):
 
     @classmethod
     def create_all_data(cls, user_id):
-        for key in USER['USER_DATA_KEYS']:
-            if cls.query.filter(cls.key == key, cls.user_id == user_id).first() is None:
-                obj = cls(user_id=user_id, key=key)
+        for data in USER['USER_DATAS']:
+            if cls.query.filter(cls.key == data[0], cls.user_id == user_id).first() is None:
+                obj = cls(user_id=user_id, key=data[0], value=data[1])
                 db.session.add(obj)
         db.session.commit()

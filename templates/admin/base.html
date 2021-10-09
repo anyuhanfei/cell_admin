@@ -155,12 +155,14 @@
             });
         }
 
-        var reg = new RegExp("/","g");
-        var 当前路由 = "{{ request.url_rule }}".replace(reg,"_")
+        var reg1 = new RegExp("/","g");
+        var reg2 = new RegExp("&lt;int:page&gt;","g");
+        var 当前路由 = "{{ request.url_rule }}".replace(reg1,"_").replace(reg2, '1')
         if(当前路由 == '_admin_'){
             window.localStorage.removeItem('一级目录id');
             window.localStorage.removeItem('二级目录路由');
         }
+        console.log(当前路由)
         if($("#二级目录" + 当前路由).length > 0){  //是目录页面
             // 高亮
             $("#二级目录" + 当前路由).attr('class', 'active')

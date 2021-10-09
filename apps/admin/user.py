@@ -3,9 +3,8 @@
 '''
 from flask import render_template, request, redirect, url_for
 
-from . import admin, check_admin_login, check_admin_power
+from . import admin, check_admin_login, check_admin_power, search, return_data
 from run import db
-from configs.common import return_data
 from configs.config import USER
 
 from models.IdxUser import IdxUser
@@ -13,13 +12,17 @@ from models.IdxUserFund import IdxUserFund
 from models.IdxUserData import IdxUserData
 
 
-@admin.route('/user/会员')
+@admin.route('/user/会员/<int:page>')
 @check_admin_login
 @check_admin_power
-def 会员():
-    users = IdxUser.query.filter(IdxUser.is_delete == 0).all()
+def 会员(page):
+    parameters = search('会员', ['account', 'is_freeze'])
+    obj = IdxUser.query
+    obj = obj.filter(IdxUser.account == parameters['account']) if parameters['account'] != '' else obj
+    obj = obj.filter(IdxUser.is_freeze == parameters['is_freeze']) if parameters['is_freeze'] != '' else obj
+    models = obj.paginate(page=page, per_page=30)
     identity_text = USER['USER_IDENTITY_TEXT']
-    return render_template('/admin/user/会员.html', users=users, identity_text=identity_text)
+    return render_template('/admin/user/会员.html', identity_text=identity_text, models=models, parameters=parameters)
 
 
 @admin.route('/user/添加会员')
@@ -27,7 +30,6 @@ def 会员():
 @check_admin_power
 def 添加会员():
     identity_text = USER['USER_IDENTITY_TEXT']
-
     return render_template('/admin/user/添加会员.html', identity_text=identity_text)
 
 
@@ -51,7 +53,7 @@ def 添加会员提交():
         else:
             return return_data(2, '', '上级' + identity_text + '输入错误')
     IdxUser.create_data(nickname, account, password, level_password, top_id)
-    return return_data(1, '', '添加成功')
+    return return_data(1, '', '添加成功', '添加会员:' + account)
 
 
 @admin.route('/user/会员编辑/<int:id>')
@@ -99,7 +101,7 @@ def 会员编辑提交(id, code):
         return return_data(2, '', '非法操作')
     db.session.add(obj)
     db.session.commit()
-    return return_data(1, '', '编辑成功')
+    return return_data(1, '', '编辑成功', '编辑会员' + obj.account + '的' + ['其他', '昵称或账号', '登录密码', '二级密码', '标记'][code])
 
 
 @admin.route('/user/会员详情')
@@ -132,14 +134,16 @@ def 会员充值提交(id):
     if fund_type == '' or fund_type is None:
         return return_data(2, '', '请选择充值币种')
     number = radio_number if (input_number == '' or input_number is None) else input_number
-    print('number' + str(number))
     if number == '' or number == 0 or number is None:
         return return_data(2, '', '请选择或填写充值金额')
     user = IdxUser.query.filter(IdxUser.user_id == id).first()
     if user is None:
         return return_data(2, '', '非法操作')
-    IdxUserFund.update_amount(id, fund_type, number)
-    return return_data(1, '', '充值成功')
+    res = IdxUserFund.update_amount(id, fund_type, number, '后台充值')
+    if res is True:
+        return return_data(1, '', '充值成功', '给会员' + user.account + '充值' + str(number) + fund_type)
+    else:
+        return return_data(2, '', '充值失败')
 
 
 @admin.route('/user/冻结会员提交/<int:id>', methods=["POST"])
@@ -152,7 +156,10 @@ def 冻结会员提交(id):
     obj.is_freeze = 1 if obj.is_freeze == 0 else 0
     db.session.add(obj)
     db.session.commit()
-    return return_data(1, obj.is_freeze, '解冻成功' if obj.is_freeze == 0 else '冻结成功')
+    if obj.is_freeze == 0:
+        return return_data(1, obj.is_freeze, '解冻成功', '解冻会员' + obj.account)
+    else:
+        return return_data(1, obj.is_freeze, '冻结成功', '冻结会员' + obj.account)
 
 
 @admin.route('/user/删除会员提交/<int:id>', methods=["POST"])
@@ -167,4 +174,4 @@ def 删除会员提交(id):
     obj.is_delete = 1
     db.session.add(obj)
     db.session.commit()
-    return return_data(1, '', '删除成功')
+    return return_data(1, '', '删除成功', '删除会员' + obj.account)

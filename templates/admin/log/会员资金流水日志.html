@@ -1,0 +1,108 @@
+{% extends "admin/base.html" %}
+
+{% block css %}
+<link href="/statics/admin/css/cell_style.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>会员资金流水纪录</h2>
+        <ol class="breadcrumb">
+            对资金流水进行筛选与管理
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="ibox-content top-button">
+            <div class="ibox-content form-inline">
+                <div class="form-group">
+                    <label for="会员账号" class="sr-only">会员账号</label>
+                    <input type="text" placeholder="会员账号" id="会员账号" class="form-control" value="{{ parameters.会员账号 }}">
+                </div>
+                <div class="form-group">
+                    <select class="form-control" id="资金类型">
+                        <option value="">请选择资金类型</option>
+                        {% for item in 资金类型 %}
+                        <option value="{{ item }}" {% if parameters.资金类型 == item %}selected{% endif %}>{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" id="类型">
+                        <option value="">请选择流水类型</option>
+                        {% for item in 流水类型 %}
+                        <option value="{{ item }}" {% if parameters.类型 == item %}selected{% endif %}>{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button class="btn btn-white" type="button" onclick="form_submit()">搜索</button>
+                <button class="btn btn-white" type="button" onclick="form_close()">清空</button>
+                <script>
+                    function form_submit(){
+                        var parameter = ['会员账号', '类型', '资金类型']
+                        var location_href = "/admin/log/会员资金流水日志/1?is_search=1"
+                        for (const key in parameter) {
+                            value = $("#" + parameter[key]).val()
+                            if(value != '' && value != 'None'){
+                                location_href += '&' + parameter[key] + '=' + value
+                            }
+                        }
+                        window.location.href = location_href
+                    }
+
+                    function form_close(){
+                        $("#会员账号").val('')
+                        $("#类型").val('')
+                        $("#资金类型").val('')
+                        form_submit()
+                    }
+                </script>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">#</th>
+                        <th style="width: 20%;">会员信息</th>
+                        <th style="width: 20%;">金额</th>
+                        <th style="width: 25%;">说明</th>
+                        <th style="width: 20%;">时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for value in models.items %}
+                    <tr id="tr{{ value.id }}">
+                        <td>{{ value.id }}</td>
+                        <td>{{ value.user.account }}</td>
+                        <td>
+                            {{ value.金额 }} {{ value.币种 }}
+                        </td>
+                        <td>
+                            {{ value.说明 }}
+                        </td>
+                        <td>
+                            {{ value.流水时间 }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div style="padding-bottom: 20px;">
+                {% import 'admin/pages.html' as pg %}
+                {{ pg.my_paginate(models,'admin.会员资金流水日志') }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="/statics/layer/layer.js"></script>
+
+{% endblock %}
