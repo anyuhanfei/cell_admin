@@ -1,9 +1,9 @@
 '''
 角色模块, 管理员模块, 目录模块, 方法管理模块, 静态资源模块
 '''
-from flask import render_template, request, redirect, url_for
+from flask import render_template, redirect, url_for
 
-from . import admin, check_admin_login, reading_data, check_developer, check_admin_power, check_admin_developer, return_data
+from . import admin, check_admin_login, reading_data, check_developer, check_admin_power, check_admin_developer, return_data, get_request
 from run import db
 from configs.common import 随机字符串
 
@@ -32,9 +32,9 @@ def 添加角色():
 @check_admin_login
 @check_admin_power
 def 添加角色提交():
-    角色名 = request.form.get('角色名')
-    备注 = request.form.get('备注')
-
+    角色名, 备注 = get_request('角色名', '备注')
+    if 角色名 == '':
+        return return_data(2, '', '请填写角色名')
     role = SysRole(角色名=角色名, 备注=备注)
     db.session.add(role)
     db.session.commit()
@@ -55,14 +55,11 @@ def 修改角色(id):
 @check_admin_login
 @check_admin_power
 def 修改角色提交(id):
-    角色名 = request.form.get('角色名')
-    备注 = request.form.get('备注')
-
+    角色名, 备注 = get_request('角色名', '备注')
     data = SysRole.query.filter(SysRole.role_id == id).first()
     if data is None:
         return return_data(2, '', '非法操作')
-    data.角色名 = 角色名
-    data.备注 = 备注
+    data.角色名, data.备注 = 角色名, 备注
     db.session.add(data)
     db.session.commit()
     return return_data(1, '', '修改成功', '修改角色：' + data.角色名)
@@ -93,7 +90,7 @@ def 修改角色权限(id):
 def 修改角色权限提交(id):
     if id == 1:
         return return_data(2, '', '不允许修改开发者角色的权限')
-    action_ids = request.form.get('action_ids')
+    action_ids = get_request('action_ids')
     data = SysRole.query.filter(SysRole.role_id == id).first()
     if data is None:
         return return_data(2, '', '非法操作')
@@ -139,11 +136,8 @@ def 添加管理员():
 @check_admin_login
 @check_admin_power
 def 添加管理员提交():
-    account = request.form.get('account')
-    nickname = request.form.get('nickname')
-    role_id = request.form.get('role_id')
-    password = request.form.get('password')
-    if account == '' or nickname == '' or password == '' or role_id == 0:
+    account, nickname, role_id, password = get_request('account', 'nickname', 'role_id', 'password')
+    if account == '' or nickname == '' or password == '' or role_id == '':
         return return_data(2, '', '请完善信息')
     role = SysRole.query.filter(SysRole.role_id == role_id).first()
     if role is None:
@@ -178,11 +172,8 @@ def 修改管理员(id):
 @check_admin_login
 @check_admin_power
 def 修改管理员提交(id):
-    account = request.form.get('account')
-    nickname = request.form.get('nickname')
-    role_id = request.form.get('role_id')
-    password = request.form.get('password')
-    if account == '' or nickname == '' or role_id == 0:
+    account, nickname, role_id, password = get_request('account', 'nickname', 'role_id', 'password')
+    if account == '' or nickname == '' or role_id == '':
         return return_data(2, '', '请完善信息')
     role = SysRole.query.filter(SysRole.role_id == role_id).first()
     if role is None:
@@ -192,9 +183,7 @@ def 修改管理员提交(id):
         return return_data(2, '', '非法操作')
     if password != '':
         data.password = SysAdmin.get_encryption_password(password, data.password_salt)
-    data.account = account
-    data.nickname = nickname
-    data.role_id = role_id
+    data.account, data.nickname, data.role_id = account, nickname, role_id
     db.session.add(data)
     db.session.commit()
     return return_data(1, '', '修改成功', '修改管理员信息:' + data.account)
@@ -204,7 +193,7 @@ def 修改管理员提交(id):
 @check_admin_login
 @check_admin_power
 def 管理员角色设置(id):
-    role_id = request.form.get('role_id')
+    role_id = get_request('role_id')
     role = SysRole.query.filter(SysRole.role_id == role_id).first()
     if role is None:
         return return_data(2, '', '请选择正确的角色')
@@ -225,10 +214,10 @@ def 删除管理员提交(id):
     data = SysAdmin.query.filter(SysAdmin.admin_id == id).first()
     if data is None:
         return return_data(2, '', '非法操作')
-    obj.is_delete = 1
-    db.session.add(obj)
+    data.is_delete = 1
+    db.session.add(data)
     db.session.commit()
-    return return_data(1, '', '删除成功', '删除管理员' + account)
+    return return_data(1, '', '删除成功', '删除管理员' + data.account)
 
 
 @admin.route('sys/目录')
@@ -255,10 +244,7 @@ def 添加一级目录():
 @check_admin_developer
 @check_developer
 def 添加一级目录提交():
-    名称 = request.form.get('名称')
-    图标 = request.form.get('图标')
-    排序 = request.form.get('排序')
-
+    名称, 图标, 排序 = get_request('名称', '图标', '排序')
     catalog = SysCatalog(名称=名称, 图标=图标, 排序=排序)
     db.session.add(catalog)
     db.session.commit()
@@ -281,11 +267,7 @@ def 添加二级目录():
 @check_admin_developer
 @check_developer
 def 添加二级目录提交():
-    名称 = request.form.get('名称')
-    上级id = request.form.get('上级id')
-    路由 = request.form.get('路由')
-    排序 = request.form.get('排序')
-
+    名称, 上级id, 路由, 排序 = get_request('名称', '上级id', '路由', '排序')
     catalog = SysCatalog(名称=名称, 上级id=上级id, 路由=路由, 排序=排序)
     db.session.add(catalog)
     db.session.commit()
@@ -310,16 +292,11 @@ def 修改一级目录(id):
 @check_admin_developer
 @check_developer
 def 修改一级目录提交(id):
-    名称 = request.form.get('名称')
-    图标 = request.form.get('图标')
-    排序 = request.form.get('排序')
-
+    名称, 图标, 排序 = get_request('名称', '图标', '排序')
     data = SysCatalog.query.filter(SysCatalog.catalog_id == id).first()
     if data is None:
         return redirect(url_for('admin.error'))
-    data.名称 = 名称
-    data.图标 = 图标
-    data.排序 = 排序
+    data.名称, data.图标, data.排序 = 名称, 图标, 排序
     db.session.add(data)
     db.session.commit()
     reading_data()
@@ -344,18 +321,11 @@ def 修改二级目录(id):
 @check_admin_developer
 @check_developer
 def 修改二级目录提交(id):
-    名称 = request.form.get('名称')
-    上级id = request.form.get('上级id')
-    路由 = request.form.get('路由')
-    排序 = request.form.get('排序')
-
+    名称, 上级id, 路由, 排序 = get_request('名称', '上级id', '路由', '排序')
     data = SysCatalog.query.filter(SysCatalog.catalog_id == id).first()
     if data is None:
         return redirect(url_for('admin.error'))
-    data.名称 = 名称
-    data.上级id = 上级id
-    data.路由 = 路由
-    data.排序 = 排序
+    data.名称, data.上级id, data.路由, data.排序 = 名称, 上级id, 路由, 排序
     db.session.add(data)
     db.session.commit()
     reading_data()
@@ -404,9 +374,7 @@ def 添加模块():
 @check_admin_developer
 @check_developer
 def 添加模块提交():
-    名称 = request.form.get('名称')
-    排序 = request.form.get('排序')
-
+    名称, 排序 = get_request('名称', '排序')
     catalog = SysModule(名称=名称, 排序=排序)
     db.session.add(catalog)
     db.session.commit()
@@ -428,11 +396,7 @@ def 添加方法():
 @check_admin_developer
 @check_developer
 def 添加方法提交():
-    名称 = request.form.get('名称')
-    上级id = request.form.get('上级id')
-    路由 = request.form.get('路由')
-    排序 = request.form.get('排序')
-
+    名称, 上级id, 路由, 排序 = get_request('名称', '上级id', '路由', '排序')
     catalog = SysModule(名称=名称, 上级id=上级id, 路由=路由, 排序=排序)
     db.session.add(catalog)
     db.session.commit()
@@ -456,14 +420,11 @@ def 修改模块(id):
 @check_admin_developer
 @check_developer
 def 修改模块提交(id):
-    名称 = request.form.get('名称')
-    排序 = request.form.get('排序')
-
+    名称, 排序 = get_request('名称', '排序')
     data = SysModule.query.filter(SysModule.module_id == id).first()
     if data is None:
         return redirect(url_for('admin.error'))
-    data.名称 = 名称
-    data.排序 = 排序
+    data.名称, data.排序 = 名称, 排序
     db.session.add(data)
     db.session.commit()
     return return_data(1, '', '修改成功')
@@ -487,18 +448,11 @@ def 修改方法(id):
 @check_admin_developer
 @check_developer
 def 修改方法提交(id):
-    名称 = request.form.get('名称')
-    上级id = request.form.get('上级id')
-    路由 = request.form.get('路由')
-    排序 = request.form.get('排序')
-
+    名称, 上级id, 路由, 排序 = get_request('名称', '上级id', '路由', '排序')
     data = SysModule.query.filter(SysModule.module_id == id).first()
     if data is None:
         return redirect(url_for('admin.error'))
-    data.名称 = 名称
-    data.上级id = 上级id
-    data.路由 = 路由
-    data.排序 = 排序
+    data.名称, data.上级id, data.路由, data.排序 = 名称, 上级id, 路由, 排序
     db.session.add(data)
     db.session.commit()
     return return_data(1, dict(), '修改成功')

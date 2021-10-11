@@ -5,7 +5,7 @@ import random
 import string
 from flask import render_template, request, session, redirect, url_for, make_response
 
-from . import admin, reading_data, check_admin_login, return_data
+from . import admin, check_admin_login, return_data, get_request
 from configs.common import 保存图片
 
 from models.SysAdmin import SysAdmin
@@ -28,9 +28,8 @@ def login_submit():
     '''登录提交
     判断账号密码是否正确，并设置一个token
     '''
-    account = request.form.get('account')
-    password = request.form.get('password')
-    if account is None or password is None:
+    account, password = get_request('account', 'password')
+    if account == '' or password == '':
         return return_data(2, '', '请填写账号或密码')
     admin_data = SysAdmin.query.filter(SysAdmin.account == account).first()
     if admin_data is None:

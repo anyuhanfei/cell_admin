@@ -5,7 +5,7 @@ import time
 
 from flask import render_template, request, redirect, url_for
 
-from . import admin, check_admin_login, check_admin_power, return_data
+from . import admin, check_admin_login, check_admin_power, return_data, get_request
 from run import db
 from configs.common import 保存图片
 
@@ -33,11 +33,11 @@ def 添加文章标签(category):
 @check_admin_login
 @check_admin_power
 def 添加文章标签提交(category):
-    name = request.form.get('name')
+    name = get_request('name')
     image = request.files.get('image')
     if category != 'category' and category != 'tag':
         return return_data(2, '', '非法操作')
-    if name == '' or name is None or image is None:
+    if name == '' or image is None:
         return return_data(2, '', '有信息未填写/上传')
     image_path = 保存图片(image, 'article')
     obj = SysArticleTag(name=name, image=image_path, type=category)
@@ -61,9 +61,9 @@ def 修改文章标签(id):
 @check_admin_login
 @check_admin_power
 def 修改文章标签提交(id):
-    name = request.form.get('name')
+    name = get_request('name')
     image = request.files.get('image')
-    if name == '' or name is None:
+    if name == '':
         return return_data(2, '', '有信息未填写')
     obj = SysArticleTag.query.filter(SysArticleTag.id == id).first()
     if obj is None or obj.is_delete == 1:
@@ -116,13 +116,7 @@ def 添加文章():
 @check_admin_login
 @check_admin_power
 def 添加文章提交():
-    title = request.form.get('title')
-    category_id = request.form.get('category_id')
-    tag_ids = request.form.get('tag_ids')
-    intro = request.form.get('intro')
-    keyword = request.form.get('keyword')
-    author = request.form.get('author')
-    content = request.form.get('content')
+    title, category_id, tag_ids, intro, keyword, author, content = get_request('title', 'category_id', 'tag_ids', 'intro', 'keyword', 'author', 'content')
     image = request.files.get('image')
     image_path = 保存图片(image, 'article')
     obj = SysArticle(title=title, category_id=category_id, tag_ids=tag_ids, intro=intro, keyword=keyword, author=author, content=content, image=image_path, insert_time=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
@@ -152,25 +146,13 @@ def 修改文章(id):
 @check_admin_login
 @check_admin_power
 def 修改文章提交(id):
-    title = request.form.get('title')
-    category_id = request.form.get('category_id')
-    tag_ids = request.form.get('tag_ids')
-    intro = request.form.get('intro')
-    keyword = request.form.get('keyword')
-    author = request.form.get('author')
-    content = request.form.get('content')
+    title, category_id, tag_ids, intro, keyword, author, content = get_request('title', 'category_id', 'tag_ids', 'intro', 'keyword', 'author', 'content')
     image = request.files.get('image')
     obj = SysArticle.query.filter(SysArticle.id == id).first()
     if obj is None or obj.is_delete == 1:
         return return_data(2, '', '非法操作')
     obj.image = obj.image if image is None else 保存图片(image, 'article')
-    obj.title = title
-    obj.category_id = category_id
-    obj.tag_ids = tag_ids
-    obj.intro = intro
-    obj.keyword = keyword
-    obj.author = author
-    obj.content = content
+    obj.title, obj.category_id, obj.tag_ids, obj.intro, obj.keyword, obj.author, obj.content = title, category_id, tag_ids, intro, keyword, author, content
     db.session.add(obj)
     db.session.commit()
     return return_data(1, '', '修改成功', '修改文章:' + obj.title)

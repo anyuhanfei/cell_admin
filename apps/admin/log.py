@@ -1,11 +1,9 @@
 '''
 日志模块
 '''
-import datetime
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template
 
-from . import admin, check_admin_login, search, check_admin_power, return_data
-from run import db
+from . import admin, check_admin_login, search, check_admin_power
 from configs.config import USER
 
 from models.IdxUser import IdxUser

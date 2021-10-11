@@ -116,6 +116,14 @@ def search(签名, 参数):
         return parameters
 
 
+def get_request(*args):
+    '''获取指定参数'''
+    res = []
+    for item in args:
+        res.append(request.values.get(item, default=''))
+    return res
+
+
 import apps.admin.homepage
 import apps.admin.sys
 import apps.admin.set
