@@ -5,7 +5,7 @@ from configs.config import DEVELOPER, USER, ADMIN_POWER
 
 admin = Blueprint('admin', __name__)
 
-
+from run import r
 from models.SysModule import SysModule
 from models.LogAdmin import LogAdmin
 
@@ -33,10 +33,10 @@ def check_admin_login(function):
         if 'admin_id' not in session or session['admin_id'] is None:
             if request.cookies.get("admin_token") is None:  # 如果不存在session，则尝试获取token
                 return redirect(url_for("admin.login"))
-            obj = LogAdmin.query.filter(LogAdmin.备用1 == request.cookies.get("admin_token")).first()
-            if obj is None:
+            admin_id = r.get('admin:token:%s' % (request.cookies.get("admin_token")))
+            if admin_id is None:
                 return redirect(url_for("admin.login"))
-            session['admin_id'] = obj.admin_id
+            session['admin_id'] = admin_id
             reading_data()
         return function(*args, **kwargs)
     return decorated_function

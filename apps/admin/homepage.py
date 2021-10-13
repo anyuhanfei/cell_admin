@@ -6,6 +6,7 @@ import string
 from flask import render_template, request, session, redirect, url_for, make_response
 
 from . import admin, check_admin_login, return_data, get_request
+from run import r
 from configs.common import 保存图片
 
 from models.SysAdmin import SysAdmin
@@ -40,7 +41,8 @@ def login_submit():
     resp = make_response(return_data(1, '', '登录成功'))
     token = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(24))
     resp.set_cookie('admin_token', token, max_age=86400*7)
-    LogAdmin.create_data(admin_data.admin_id, '登录', token)
+    # LogAdmin.create_data(admin_data.admin_id, '登录', token)
+    r.set('admin:token:%s' % (token), admin_data.admin_id)
     return resp
 
 

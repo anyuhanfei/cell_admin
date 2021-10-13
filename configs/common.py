@@ -53,3 +53,15 @@ def 随机字符串(num, pattern='数字'):
     for i in range(0, num):
         res_str += random.choice(s)
     return res_str
+
+
+def get_host_ip():
+    """查询本机ip地址"""
+    import socket
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+    finally:
+        s.close()
+    return ip

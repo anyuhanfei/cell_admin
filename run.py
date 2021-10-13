@@ -1,4 +1,5 @@
 import os
+import redis
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -25,6 +26,10 @@ app.config['SESSION_PERMANENT'] = True  # 如果设置为True，则关闭浏览�
 app.config['SESSION_USE_SIGNER'] = False  # 是否对发送到浏览器上session的cookie值进行加密
 
 db = SQLAlchemy(app)
+
+pool = redis.ConnectionPool(host=config.REDIS['HOST'], port=config.REDIS['PORT'], password=config.REDIS['PASSWORD'], decode_responses=True)
+# connection_pool 连接池
+r = redis.Redis(connection_pool=pool)
 
 from apps.admin import admin as admin_blueprint
 
