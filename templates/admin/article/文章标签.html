@@ -18,8 +18,13 @@
 <div class="wrapper wrapper-content animated fadeIn">
     <div class="row">
         <div class="ibox-content top-button">
-            <a class="btn btn-primary" href="{{ url_for('admin.添加文章标签', category='tag') }}">添加文章标签</a>
             <a class="btn btn-primary" href="{{ url_for('admin.添加文章标签', category='category') }}">添加文章分类</a>
+            {% if TAG['ON-OFF'] %}
+            <a class="btn btn-primary" href="{{ url_for('admin.添加文章标签', category='tag') }}">添加文章标签</a>
+            {% endif %}
+            {% if ATTRIBUTE['ON-OFF'] %}
+            <a class="btn btn-primary" href="{{ url_for('admin.添加文章标签', category='attribute') }}">添加文章属性</a>
+            {% endif %}
         </div>
         <div class="ibox-content">
             <br/>
@@ -27,9 +32,16 @@
                 <li class="active">
                     <a data-toggle="tab" href="#tab-1"> 文章分类 </a>
                 </li>
+                {% if TAG['ON-OFF'] %}
                 <li>
                     <a data-toggle="tab" href="#tab-2"> 文章标签 </a>
                 </li>
+                {% endif %}
+                {% if ATTRIBUTE['ON-OFF'] %}
+                <li>
+                    <a data-toggle="tab" href="#tab-3"> 文章属性 </a>
+                </li>
+                {% endif %}
             </ul>
             <div class="tab-content">
                 <div id="tab-1" class="tab-pane active">
@@ -39,7 +51,9 @@
                                 <tr>
                                     <th>#</th>
                                     <th>名称</th>
+                                    {% if CATEGORY['IMAGE'] %}
                                     <th>图片</th>
+                                    {% endif %}
                                     <th>操作</th>
                                 </tr>
                             </thead>
@@ -49,9 +63,11 @@
                                 <tr id="tr{{ value.id }}">
                                     <td>{{ value.id }}</td>
                                     <td>{{ value.name }}</td>
+                                    {% if CATEGORY['IMAGE'] %}
                                     <td>
                                         <img id="image{{ value.id }}" src="/{{ value.image }}" onclick="show_image('{{ value.id }}')" width="60px" height="60px">
                                     </td>
+                                    {% endif %}
                                     <td>
                                         <a class="btn btn-xs btn-primary" href="{{ url_for('admin.修改文章标签', id=value.id) }}">
                                             <i class="fa fa-wrench"></i> 修改
@@ -75,7 +91,9 @@
                                 <tr>
                                     <th>#</th>
                                     <th>名称</th>
+                                    {% if CATEGORY['TAG']  %}
                                     <th>图片</th>
+                                    {% endif %}
                                     <th>操作</th>
                                 </tr>
                             </thead>
@@ -85,9 +103,45 @@
                                 <tr id="tr{{ value.id }}">
                                     <td>{{ value.id }}</td>
                                     <td>{{ value.name }}</td>
+                                    {% if CATEGORY['TAG']  %}
                                     <td>
                                         <img id="image{{ value.id }}" src="/{{ value.image }}" onclick="show_image('{{ value.id }}')" width="60px" height="60px">
                                     </td>
+                                    {% endif %}
+                                    <td>
+                                        <a class="btn btn-xs btn-primary" href="{{ url_for('admin.修改文章标签', id=value.id) }}">
+                                            <i class="fa fa-wrench"></i> 修改
+                                        </a>
+                                        <a class="btn btn-xs btn-danger" href="###" onclick="delete_item('{{ value.id }}')">
+                                            <i class="fa fa-times"></i> 删除
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div style="padding-bottom: 20px;"></div>
+                    </div>
+                </div>
+                <div id="tab-3" class="tab-pane">
+                    <div class="ibox-content">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>名称</th>
+                                    <th>标签</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for value in data %}
+                                {% if value.type == 'attribute' %}
+                                <tr id="tr{{ value.id }}">
+                                    <td>{{ value.id }}</td>
+                                    <td>{{ value.name }}</td>
+                                    <td><i class="fa {{ value.image }}"></i></td>
                                     <td>
                                         <a class="btn btn-xs btn-primary" href="{{ url_for('admin.修改文章标签', id=value.id) }}">
                                             <i class="fa fa-wrench"></i> 修改

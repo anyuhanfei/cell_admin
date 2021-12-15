@@ -13,4 +13,4 @@ class SysArticleTag(db.Model):
     articles = db.relationship('SysArticle', backref='category')
 
     def __repe__(self):
-        return "<sys_asys_article_tag:%s %s>" % (self.id, self.name)
+        return "<sys_sys_article_tag:%s %s>" % (self.id, self.name)

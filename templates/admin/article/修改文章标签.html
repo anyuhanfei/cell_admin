@@ -39,18 +39,47 @@
                             <input type="text" id="name" class="form-control" value="{{ data.name }}">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
+                        <label class="col-sm-2 control-label">上传图片</label>
+                        <div class="col-sm-9 image_input">
+                            <input type="file" class="file_input" id="image">
+                            <img class="img" src="/{{ data.image }}" height="200">
+                        </div>
+                    </div> -->
+                    <div class="form-group" id="icon_div"><label class="col-sm-2 control-label">图标</label>
+                        <div class="col-md-4">
+                            <input type="text" id="icon" class="form-control" value="{{ data.image }}">
+                        </div>
+                        <a class="btn btn-white" id="展示图标父类" style="display: None;"><i class='' id="展示图标"></i></a>
+                        <i class="fa {{ data.image }}"></i>
+                        <a class="btn btn-primary" href="{{ url_for('admin.图标') }}" target="_blank">查看图标资源</a>
+                    </div>
+                    <div class="form-group" id="image_div">
                         <label class="col-sm-2 control-label">上传图片</label>
                         <div class="col-sm-9 image_input">
                             <input type="file" class="file_input" id="image">
                             <img class="img" src="/{{ data.image }}" height="200">
                         </div>
                     </div>
+                    {% if category_text == '属性' %}
+                        <script>
+                            $("#image_div").hide()
+                        </script>
+                    {% else %}
+                        <script>
+                            $("#icon_div").hide()
+                        </script>
+                        {% if CATEGORY['IMAGE'] == False %}
+                            <script>
+                                $("#image_div").hide()
+                            </script>
+                        {% endif %}
+                    {% endif %}
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
                             <button class="btn btn-white" type="button" id="cancel">取消</button>
-                            <button class="btn btn-primary" type="button" id="submit">添加</button>
+                            <button class="btn btn-primary" type="button" id="submit">修改</button>
                         </div>
                     </div>
                 </form>
@@ -74,6 +103,7 @@
     $("#submit").click(function () {
         var fd = new FormData();
         fd.append('name', $("#name").val());
+        fd.append('icon', $("#icon").val());
         fd.append("image", $('#image')[0].files[0]);
         $.ajax({
             url: "/admin/article/修改文章标签提交/{{ id }}",

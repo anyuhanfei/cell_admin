@@ -39,13 +39,34 @@
                             <input type="text" id="name" class="form-control">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="icon_div"><label class="col-sm-2 control-label">图标</label>
+                        <div class="col-md-4">
+                            <input type="text" id="icon" class="form-control">
+                        </div>
+                        <a class="btn btn-white" id="展示图标父类" style="display: None;"><i class='' id="展示图标"></i></a>
+                        <a class="btn btn-primary" href="{{ url_for('admin.图标') }}" target="_blank">查看图标资源</a>
+                    </div>
+                    <div class="form-group" id="image_div">
                         <label class="col-sm-2 control-label">上传图片</label>
                         <div class="col-sm-9 image_input">
                             <input type="file" class="file_input" id="image">
                             <img class="img" src="/statics/admin/image/adds.png" height="200">
                         </div>
                     </div>
+                    {% if category_text == '属性' %}
+                        <script>
+                            $("#image_div").hide()
+                        </script>
+                    {% else %}
+                        <script>
+                            $("#icon_div").hide()
+                        </script>
+                        {% if CATEGORY['IMAGE'] == False %}
+                            <script>
+                                $("#image_div").hide()
+                            </script>
+                        {% endif %}
+                    {% endif %}
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
@@ -75,6 +96,7 @@
         var fd = new FormData();
         fd.append('name', $("#name").val());
         fd.append("image", $('#image')[0].files[0]);
+        fd.append('icon', $("#icon").val())
         $.ajax({
             url: "/admin/article/添加文章标签提交/{{ category }}",
             type: "post",

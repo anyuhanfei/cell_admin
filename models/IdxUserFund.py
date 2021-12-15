@@ -55,9 +55,6 @@ class IdxUserFund(db.Model):
         这就可能会需要放置在一起，以便保证事务的原子性
         '''
         obj = cls.get_one_coin(user_id, 币种)
-        if obj is None:
-            cls.create_data(user_id, 币种)
-            obj = cls.get_one_coin(user_id, 币种)
         obj.金额 += float(金额)
         db.session.add(obj)
         if return_type == 'bool':

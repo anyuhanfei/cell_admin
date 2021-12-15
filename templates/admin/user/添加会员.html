@@ -38,7 +38,7 @@
                             <input type="text" id="nickname" class="form-control">
                         </div>
                     </div>
-                    <div class="form-group"><label class="col-sm-2 control-label">{{ identity_text }}</label>
+                    <div class="form-group"><label class="col-sm-2 control-label">{{ user['USER_IDENTITY_TEXT'] }}</label>
                         <div class="col-sm-9">
                             <input type="text" id="account" class="form-control">
                         </div>
@@ -48,16 +48,20 @@
                             <input type="password" id="password" class="form-control">
                         </div>
                     </div>
+                    {% if user['USER_LEVEL_PASSWORD'] %}
                     <div class="form-group"><label class="col-sm-2 control-label">二级密码</label>
                         <div class="col-sm-9">
                             <input type="password" id="level_password" class="form-control">
                         </div>
                     </div>
-                    <div class="form-group"><label class="col-sm-2 control-label">上级{{ identity_text }}</label>
+                    {% endif %}
+                    {% if user['USER_TOP_USER'] %}
+                    <div class="form-group"><label class="col-sm-2 control-label">上级{{ user['USER_IDENTITY_TEXT'] }}</label>
                         <div class="col-sm-9">
                             <input type="text" id="top_account" class="form-control">
                         </div>
                     </div>
+                    {% endif %}
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">

@@ -18,7 +18,65 @@
 <div class="wrapper wrapper-content animated fadeIn">
     <div class="row">
         <div class="ibox-content top-button">
-            <a class="btn btn-primary" href="{{ url_for('admin.添加文章') }}">添加文章</a>
+            <div class="ibox-content form-inline">
+                <a class="btn btn-primary" href="{{ url_for('admin.添加文章') }}">添加文章</a>
+                <div class="form-group">
+                    <label for="account" class="sr-only">标题</label>
+                    <input type="text" placeholder="标题" id="标题" class="form-control" value="{{ parameters.标题 }}">
+                </div>
+                <div class="form-group">
+                    <label for="account" class="sr-only">全文检索</label>
+                    <input type="text" placeholder="全文检索" id="全文检索" class="form-control" value="{{ parameters.全文检索 }}">
+                </div>
+                <div class="form-group">
+                    <select class="form-control" id="分类">
+                        <option value="">请选择文章分类</option>
+                        {% for value in categorys %}
+                        <option value="{{ value.id }}" {% if parameters.分类 == value.id %}selected{% endif %}>{{ value.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" id="标签">
+                        <option value="">请选择文章标签</option>
+                        {% for value in tags %}
+                        <option value="{{ value.id }}" {% if parameters.标签 == value.id %}selected{% endif %}>{{ value.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" id="属性">
+                        <option value="">请选择文章属性</option>
+                        {% for value in attributes %}
+                        <option value="{{ value.id }}" {% if parameters.属性 == value.id %}selected{% endif %}>{{ value.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button class="btn btn-white" type="button" onclick="form_submit()">搜索</button>
+                <button class="btn btn-white" type="button" onclick="form_close()">清空</button>
+                <script>
+                    function form_submit(){
+                        var parameter = ['分类', '属性', '标签', '标题', '全文检索']
+                        var location_href = "/admin/article/文章/1?is_search=1"
+                        for (const key in parameter) {
+                            value = $("#" + parameter[key]).val()
+                            if(value != '' && value != 'None'){
+                                location_href += '&' + parameter[key] + '=' + value
+                            }
+                        }
+                        window.location.href = location_href
+                    }
+
+                    function form_close(){
+                        $("#分类").val('')
+                        $("#属性").val('')
+                        $("#标签").val('')
+                        $("#标题").val('')
+                        $("#全文检索").val('')
+                        form_submit()
+                    }
+                </script>
+            </div>
         </div>
         <div class="ibox-content">
             <table class="table table-bordered">
@@ -27,14 +85,22 @@
                         <th style="width: 10%;">#</th>
                         <th style="width: 15%;">标题</th>
                         <th style="width: 10%;">分类</th>
+                        {% if TAG['ON-OFF'] %}
                         <th style="width: 10%;">标签</th>
+                        {% endif %}
+                        {% if ARTICLE['KEYWORD'] or ARTICLE['INTRO'] %}
                         <th style="width: 20%;">关键字/简介</th>
+                        {% endif %}
+                        {% if ARTICLE['IMAGE'] %}
                         <th style="width: 10%;">图片</th>
+                        {% endif %}
+                        <th style="width: 10%;">统计</th>
+                        <th style="width: 10%;">时间</th>
                         <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for value in data %}
+                    {% for value in models.items %}
                     <tr id="tr{{ value.id }}">
                         <td>{{ value.id }}</td>
                         <td>
@@ -42,14 +108,33 @@
                             <p class="text-right">--{{ value.author }}</p>
                         </td>
                         <td>{{ value.category.name }}</td>
+                        {% if TAG['ON-OFF'] %}
                         <td>{{ value.tag_texts }}</td>
+                        {% endif %}
+                        {% if ARTICLE['KEYWORD'] or ARTICLE['INTRO'] %}
                         <td>
-                            <span class="badge">{{ value.keyword }}</span><br/>
+                            {% if ARTICLE['KEYWORD'] %}
+                            {% for key_word_value in value.keyword.split(' ') %}
+                            <span class="badge">{{ key_word_value }}</span>
+                            {% endfor %}
+                            <br/>
+                            {% endif %}
+                            {% if ARTICLE['INTRO'] %}
                             {{ value.intro }}
+                            {% endif %}
                         </td>
+                        {% endif %}
+                        {% if ARTICLE['IMAGE'] %}
                         <td>
                             <img id="image{{ value.id }}" src="/{{ value.image }}" onclick="show_image('{{ value.id }}')" width="60px" height="60px">
                         </td>
+                        {% endif %}
+                        <td onmouseover="show_update('{{ value.id }}')" onmouseout="hide_update('{{ value.id }}')">
+                            {% for data in value.datas %}
+                            {{ data.key }} : <span id="value{{ data.id }}">{{ data.value }}</span> <i class="fa fa-wrench id{{ value.id }}" style="display: none;" onclick="update_num('{{ data.id }}')"></i> <br/>
+                            {% endfor %}
+                        </td>
+                        <td>{{ value.insert_time }}</td>
                         <td>
                             <a data-toggle="modal" class="btn btn-xs btn-primary" href="#modal-form{{ value.id }}">展示内容</a>
                             <div id="modal-form{{ value.id }}" class="modal fade" aria-hidden="true">
@@ -71,7 +156,12 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <div style="padding-bottom: 20px;"></div>
+            <div style="padding-bottom: 20px;">
+                <div style="padding-bottom: 20px;">
+                    {% import 'admin/pages.html' as pg %}
+                    {{ pg.my_paginate(models,'admin.文章') }}
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -81,6 +171,38 @@
 {% block js %}
 <script src="/statics/layer/layer.js"></script>
 <script>
+    function show_update(id){
+        $(".id" + id).show()
+    }
+
+    function hide_update(id){
+        $(".id" + id).hide()
+    }
+
+    function update_num(id){
+        layer.prompt({
+            formType: 3,
+            value: '1',
+            title: '请输入要增加的数量',
+        }, function(value, index, elem){
+            $.ajax({
+                url: "/admin/article/修改文章统计值/" + id,
+                type: "post",
+                data: {num: value},
+                success: function(data){
+                    if(data.code == 1){
+                        cell_msg('success', '修改文章统计值', data.msg)
+                        $("#value" + id).html(parseInt($("#value" + id).html()) + parseInt(value))
+                    }else{
+                        cell_msg('error', '修改文章统计值', data.msg)
+                    }
+                }
+            })
+            layer.close(index);
+        });
+
+    }
+
     function delete_item(id){
         layer.confirm('确认删除?', {
             btn: ['确认','取消'] //按钮

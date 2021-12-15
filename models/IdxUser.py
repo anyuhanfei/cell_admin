@@ -19,12 +19,13 @@ class IdxUser(db.Model):
     password = db.Column(db.String(255), unique=True, nullable=False, default='')
     password_salt = db.Column(db.String(255), unique=True, nullable=False, default='')
     level_password = db.Column(db.String(255), unique=True, nullable=False, default='')
-    top_id = db.Column(db.Integer, unique=True, nullable=False, default=0)
+    top_id = db.Column(db.Integer, db.ForeignKey("idx_user.user_id"))
     is_freeze = db.Column(db.Integer, unique=True, nullable=False, default=0)
     is_delete = db.Column(db.Integer, unique=True, nullable=False, default=0)
     register_time = db.Column(db.Date, default=datetime.datetime.now)
 
     logs = db.relationship('LogUserFund', backref="user")
+    top_user = db.relationship('IdxUser', remote_side=[user_id])
 
     def __repe__(self):
         return "<sys_ad:%s %s>" % (self.user_id, self.identity)

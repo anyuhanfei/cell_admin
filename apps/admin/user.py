@@ -20,17 +20,15 @@ def 会员(page):
     obj = IdxUser.query
     obj = obj.filter(IdxUser.account == parameters['account']) if parameters['account'] != '' else obj
     obj = obj.filter(IdxUser.is_freeze == parameters['is_freeze']) if parameters['is_freeze'] != '' else obj
-    models = obj.paginate(page=page, per_page=30)
-    identity_text = USER['USER_IDENTITY_TEXT']
-    return render_template('/admin/user/会员.html', identity_text=identity_text, models=models, parameters=parameters)
+    models = obj.order_by(IdxUser.user_id.desc()).paginate(page=page, per_page=30)
+    return render_template('/admin/user/会员.html', user=USER, models=models, parameters=parameters)
 
 
 @admin.route('/user/添加会员')
 @check_admin_login
 @check_admin_power
 def 添加会员():
-    identity_text = USER['USER_IDENTITY_TEXT']
-    return render_template('/admin/user/添加会员.html', identity_text=identity_text)
+    return render_template('/admin/user/添加会员.html', user=USER)
 
 
 @admin.route('/user/添加会员提交', methods=['POST'])
@@ -59,8 +57,7 @@ def 会员编辑(id):
     user = IdxUser.query.filter(IdxUser.user_id == id).first()
     if user is None:
         return redirect(url_for('admin.error'))
-    identity_text = USER['USER_IDENTITY_TEXT']
-    return render_template('/admin/user/会员编辑.html', user=user, id=id, identity_text=identity_text)
+    return render_template('/admin/user/会员编辑.html', user=user, id=id, USER=USER)
 
 
 @admin.route('/user/会员编辑提交/<int:id>/<int:code>', methods=["POST"])

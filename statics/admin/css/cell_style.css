@@ -43,3 +43,11 @@
 .editor_text img {
     width: 100%;
 }
+
+.footer {
+    position: fixed
+}
+
+.footer div {
+    text-align: center;
+}
